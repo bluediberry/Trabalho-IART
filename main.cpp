@@ -38,3 +38,34 @@ int main() {
     return 0;
 }
 
+void Up(int posx, int posy) {
+	while (Maze[posx][posy - 1] == 0 || Maze[posx][posy - 1] == 'T') {
+		Maze[posx][posy - 1] = 0;
+		Maze[posx][posy - 1] = 'A';
+		posy = posy - 1;
+	}
+}
+
+void Down(int posx, int posy) {
+	while (Maze[posx][posy + 1] == 0 || Maze[posx][posy + 1] == 'T') {
+		Maze[posx][posy + 1] = 0;
+		Maze[posx][posy + 1] = 'A';
+		posy = posy + 1;
+	}
+}
+
+void Left(int posx, int posy) {
+	while (Maze[posx - 1][posy] == 0 || Maze[posx - 1][posy] == 'T') {
+		Maze[posx - 1][posy] = 0;
+		Maze[posx - 1][posy] = 'A';
+		posx = posx - 1;
+	}
+}
+
+void Right(int posx, int posy) {
+	while (Maze[posx + 1][posy] == 0 || Maze[posx + 1][posy] == 'T') {
+		Maze[posx + 1][posy] = 0;
+		Maze[posx + 1][posy] = 'A';
+		posx = posx + 1;
+	}
+}
