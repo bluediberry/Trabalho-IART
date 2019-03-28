@@ -2,15 +2,11 @@
 #include <cstring>
 #include <stdio.h>
 
+
 using namespace std;
 
 const int MazeHeight = 18;
 const int MazeWidth = 18;
-
-#define LIGHTRED "\033[1;31m"
-#define LIGHTBLUE "\033[1;34m"
-#define WHITE "\033[1;30m"
-#define BROWN "\033[1;37m"
 
 
 char Maze[MazeHeight][MazeWidth] =
@@ -51,32 +47,21 @@ public:
 COORD StartingPoint(10,3);
 COORD EndingPoint(3, 12);
 
-//==========================================================================================
-// Set text color & background
-void setcolor(string color, const string background_color)
-{
-    cout << color << background_color;
-}
-
 
 void print_maze(){
     for(int i = 0; i < MazeHeight-1; i++){
         for(int j = 0; j < MazeWidth; j++){
             //cout << Maze[i][j];
             if(Maze[i][j] == Wall){
-                setcolor(WHITE, BROWN);
-                cout << " 1 ";
+                cout << " # ";
             }
             else if(Maze[i][j] == Free){
-                setcolor(WHITE, WHITE);
-                cout << " 0 ";
+                cout << "   ";
             }
             else if(Maze[i][j] == Target){
-                setcolor(LIGHTRED, LIGHTRED);
                 cout << " T ";
             }
             else if(Maze[i][j] == Robot){
-                setcolor(LIGHTBLUE, LIGHTBLUE);
                 cout << " R ";
             }
         }
@@ -84,6 +69,8 @@ void print_maze(){
         cout << endl;
     }
 }
+
+void Up(int posx, int posy);
 
 int main() {
     
