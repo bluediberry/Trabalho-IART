@@ -3,9 +3,13 @@
 class Node {
 
 public:
-	int id;
-	std::string info;
-	Node *parent;
+//	int id;
+	Coord position; //state
+	Node *parent; //parent node
+	char direction; //operator
+	int depth; // depth of the node
+	int cost; // path cost
+
 	std::vector<Node *> children;
 
 
