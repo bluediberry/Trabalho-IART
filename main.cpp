@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstring>
+#include <vector>
 #include <stdio.h>
 #include <unistd.h>
 
@@ -8,12 +9,6 @@ using namespace std;
 
 const int MazeHeight = 18;
 const int MazeWidth = 18;
-
-void Up(int x, int y);
-void Down(int x, int y);
-void Left(int x, int y);
-void Right(int x, int y);
-
 
 char Maze[MazeHeight][MazeWidth] =
 {
@@ -53,6 +48,7 @@ public:
 };
 
 COORD StartingPoint(3,10);
+COORD RobotPosition(StartingPoint);
 COORD EndingPoint(12, 3);
 
 
@@ -81,74 +77,21 @@ void print_maze(){
     }
 }
 
-bool Solve(int X, int Y){
-    
-    Maze[X][Y] = Robot;
-    
-    print_maze();
-    sleep(1);
-    
-    if (X == EndingPoint.X && Y == EndingPoint.Y)
-    {
-        return true;
-    }
-    else if (Y > 0 && Maze[X][Y - 1] == Free){
-        while (Maze[X][Y - 1] == Free || Maze[X][Y - 1]  == 'T') {
-            Maze[X][Y] = Free;
-            Maze[X][Y - 1] = 'R';
-            Y--;
-        }
-        return true;
-    }
-    else if (Y < MazeHeight && Maze[X][Y + 1] == Free){
-        while (Maze[X][Y + 1] == Free || Maze[X][Y + 1]  == 'T') {
-            Maze[X][Y] = Free;
-            Maze[X][Y + 1] = 'R';
-            Y++;
-        }
-        return true;
-    }
-    
-    else if (X > 0 && Maze[X + 1][Y] == Free){
-        while (Maze[X +1 ][Y] == Free || Maze[X + 1][Y]  == 'T') {
-            Maze[X][Y] = Free;
-            Maze[X + 1][Y] = 'R';
-            X++;
-        }
-        return true;
-        
-    }
-    else if (X < MazeWidth && Maze[X - 1][Y] == Free){
-        while (Maze[X - 1][Y] == Free || Maze[X - 1][Y]  == 'T') {
-            Maze[X][Y] = Free;
-            Maze[X - 1][Y] = 'R';
-            X--;
-        }
-        return true;
-    }
-    
-    Maze[X][Y] = Free;
-    
-    
-    //Maze[X][Y] = Robot;
-    print_maze();
-    sleep(1);
-    
-    return false;
+vector<char> AvailableMoves(int x, int y) {
+	vector<char> moves;
+	if (Maze[x - 1][y] = Free)
+		moves.push_back('L');
+	if (Maze[x + 1][y] = Free)
+		moves.push_back('R');
+	if (Maze[x][y - 1] = Free)
+		moves.push_back('U');
+	if (Maze[x][y + 1] = Free)
+		moves.push_back('D');
+	return moves;
 }
 
 int main() {
     
-    print_maze();
-    
-    if (Solve(StartingPoint.X, StartingPoint.Y))
-    {
-        print_maze();
-    }
-    else
-    {
-        printf("Damn\n");
-    }
     
     return 0;
 }
