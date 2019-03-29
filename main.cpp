@@ -3,6 +3,7 @@
 #include <vector>
 #include <stdio.h>
 #include <unistd.h>
+#include "Coord.h"
 
 using namespace std;
 
@@ -37,18 +38,10 @@ const char Target = 'T';
 const char Robot = 'R';
 
 
-class COORD
-{
-public:
-    int X;
-    int Y;
-    COORD(int x = 0, int y = 0) { X = x; Y = y; }
-    COORD(const COORD &coord) { X = coord.X; Y = coord.Y; }
-};
 
-COORD StartingPoint(3,10);
-COORD RobotPosition(StartingPoint);
-COORD EndingPoint(12, 3);
+Coord StartingPoint(3,10);
+Coord RobotPosition(StartingPoint);
+Coord EndingPoint(12, 3);
 
 
 void print_maze(){
