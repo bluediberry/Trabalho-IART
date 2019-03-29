@@ -5,13 +5,13 @@
 #include <unistd.h>
 #include "Coord.h"
 
+
 using namespace std;
 
 const int MazeHeight = 18;
 const int MazeWidth = 18;
 
-
-char Maze[MazeHeight][MazeWidth] =
+char Maze[MazeWidth][MazeHeight] =
 {
     { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
     { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
@@ -38,16 +38,16 @@ const char Target = 'T';
 const char Robot = 'R';
 
 
-
-Coord StartingPoint(3,10);
+Coord StartingPoint(10,3);
 Coord RobotPosition(StartingPoint);
-Coord EndingPoint(12, 3);
+Coord EndingPoint(3, 12);
 
 
 void print_maze(){
+
+    //cout << "Starting Point: "<< Maze[StartingPoint.X][StartingPoint.Y] << endl;
     for(int i = 0; i < MazeHeight-1; i++){
         for(int j = 0; j < MazeWidth; j++){
-            //cout << Maze[i][j];
             if(Maze[i][j] == Wall){
                 cout << " # ";
             }
@@ -60,9 +60,9 @@ void print_maze(){
             else if(Maze[i][j] == Robot){
                 cout << " R ";
             }
-            
+
         }
-        
+
         cout << endl;
     }
 }
@@ -82,99 +82,91 @@ vector<char> AvailableMoves(int x, int y) {
 
 
 bool isNextToWall(int X, int Y){
-    return (Maze[Y - 1][X] == Wall || Maze[Y + 1][X] == Wall || Maze[Y][X - 1] == Wall || Maze[Y][X - 1] == Wall);
+    return ((Maze[Y - 1][X] == Wall && Maze[Y][X - 1] == Wall ) ||
+            (Maze[Y + 1][X] == Wall && Maze[Y][X - 1] == Wall ) ||
+            (Maze[Y - 1][X] == Wall && Maze[Y][X + 1] == Wall ) ||
+            (Maze[Y + 1][X] == Wall && Maze[Y][X + 1] == Wall ));
+}
+
+void Up() {
+    Maze[StartingPoint.X][StartingPoint.Y] = Robot;
+    while (Maze[StartingPoint.X][StartingPoint.Y - 1] == 0 || Maze[StartingPoint.X][StartingPoint.Y - 1] == 'T') {
+        Maze[StartingPoint.X][StartingPoint.Y] = Free;
+        Maze[StartingPoint.X][StartingPoint.Y - 1] = 'R';
+        StartingPoint.Y--;
+    }
+    print_maze();
+    sleep(1);
+}
+
+void Down() {
+    Maze[StartingPoint.X][StartingPoint.Y] = Robot;
+    while (Maze[StartingPoint.X][StartingPoint.Y + 1] == 0|| Maze[StartingPoint.X][StartingPoint.Y + 1] == 'T') {
+        Maze[StartingPoint.X][StartingPoint.Y] = Free;
+        Maze[StartingPoint.X][StartingPoint.Y + 1] = 'R';
+        StartingPoint.Y++;
+    }
+    print_maze();
+    sleep(1);
+}
+
+void Left() {
+    Maze[StartingPoint.X][StartingPoint.Y] = Robot;
+    while (Maze[StartingPoint.X - 1][StartingPoint.Y] == 0 || Maze[StartingPoint.X - 1][StartingPoint.Y] == 'T') {
+        Maze[StartingPoint.X][StartingPoint.Y] = Free;
+        Maze[StartingPoint.X - 1][StartingPoint.Y] = 'R';
+        StartingPoint.X--;
+    }
+    print_maze();
+    sleep(1);
+}
+
+void Right() {
+    Maze[StartingPoint.X][StartingPoint.Y] = Robot;
+    while (Maze[StartingPoint.X + 1][StartingPoint.Y] == 0 || Maze[StartingPoint.X + 1][StartingPoint.Y] == 'T') {
+        Maze[StartingPoint.X][StartingPoint.Y] = Free;
+        Maze[StartingPoint.X + 1][StartingPoint.Y] = 'R';
+        StartingPoint.X++;
+    }
+    print_maze();
+    sleep(1);
 }
 
 
-bool Solve(int X, int Y)
+
+void Solve()
 {
-    // Make the move (if it's wrong, we will backtrack later.
-    Maze[Y][X] = Robot;
-    
-    // If you want progressive update, uncomment these lines...
-    if(isNextToWall(X, Y)){
-        print_maze();
-        sleep(1);}
-    
-    // Check if we have reached our goal.
-    if (X == EndingPoint.X && Y == EndingPoint.Y)
-    {
-        exit(0);
+
+
+    int n;
+    n = rand()%4;
+
+    switch (n) {
+        case 0:
+            Up();
+            break;
+
+        case 1:
+            Down();
+            break;
+        case 2:
+            Left();
+            break;
+        case 3:
+            Right();
+            break;
+        default: {break;}
     }
-    
-    // Recursively search for our goal.
-    if (Y > 0 && (Maze[Y - 1][X] == Free || Maze[Y - 1][X] == Target) && Solve(X, Y - 1))
-    {
-        return true;
-    }
-    if (Y < MazeHeight && (Maze[Y + 1][X] == Free || Maze[Y + 1][X] == Target) && Solve(X, Y + 1))
-    {
-        return true;
-    }
-    if (X > 0 && (Maze[Y][X - 1] == Free || Maze[Y][X - 1] == Target) && Solve(X - 1, Y))
-    {
-        return true;
-    }
-    if (X < MazeWidth && (Maze[Y][X + 1] == Free || Maze[Y][X + 1] == Target) && Solve(X + 1, Y))
-    {
-        return true;
-    }
-    
-    // Otherwise we need to backtrack and find another solution.
-    Maze[Y][X] = Free;
-    
-    print_maze();
-    sleep(1);
-    return false;
+
 }
 
 int main() {
-    
+
     print_maze();
-    
-    if (Solve(StartingPoint.X, StartingPoint.Y))
-    {
-        print_maze();
+
+    while(StartingPoint.X != EndingPoint.X || StartingPoint.Y != EndingPoint.Y){
+    Solve();
     }
-    else
-    {
-        printf("Damn\n");
-    }
-    
-    
+
     return 0;
 }
-
-void Up(int posx, int posy) {
-    while (Maze[posx][posy - 1] == Free || Maze[posx][posy - 1] == 'T') {
-        Maze[posx][posy - 1] = Free;
-        Maze[posx][posy - 1] = 'R';
-        posy = posy - 1;
-    }
-}
-
-void Down(int posx, int posy) {
-    while (Maze[posx][posy + 1] == Free || Maze[posx][posy + 1] == 'T') {
-        Maze[posx][posy + 1] = Free;
-        Maze[posx][posy + 1] = 'R';
-        posy = posy + 1;
-    }
-}
-
-void Left(int posx, int posy) {
-    while (Maze[posx - 1][posy] == Free || Maze[posx - 1][posy] == 'T') {
-        Maze[posx - 1][posy] = Free;
-        Maze[posx - 1][posy] = 'R';
-        posx = posx - 1;
-    }
-}
-
-void Right(int posx, int posy) {
-    while (Maze[posx + 1][posy] == Free || Maze[posx + 1][posy] == 'T') {
-        Maze[posx + 1][posy] = Free;
-        Maze[posx + 1][posy] = 'R';
-        posx = posx + 1;
-    }
-}
-
-

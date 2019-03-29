@@ -1,12 +1,7 @@
 #include "Coord.h"
 
-class Coord
-{
-public:
-	int X;
-	int Y;
 
-	Coord::Coord(int x = 0, int y = 0)
+	Coord::Coord(int x, int y)
 	{
 		X = x; Y = y;
 	}
@@ -16,4 +11,3 @@ public:
 		X = coord.X; Y = coord.Y;
 	}
 
-};
