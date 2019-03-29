@@ -9,11 +9,6 @@ using namespace std;
 const int MazeHeight = 18;
 const int MazeWidth = 18;
 
-void Up(int x, int y);
-void Down(int x, int y);
-void Left(int x, int y);
-void Right(int x, int y);
-
 
 char Maze[MazeHeight][MazeWidth] =
 {
