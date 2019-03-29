@@ -44,7 +44,7 @@ Coord EndingPoint(3, 12);
 
 
 void print_maze(){
-
+    
     //cout << "Starting Point: "<< Maze[StartingPoint.X][StartingPoint.Y] << endl;
     for(int i = 0; i < MazeHeight-1; i++){
         for(int j = 0; j < MazeWidth; j++){
@@ -60,9 +60,9 @@ void print_maze(){
             else if(Maze[i][j] == Robot){
                 cout << " R ";
             }
-
+            
         }
-
+        
         cout << endl;
     }
 }
@@ -80,15 +80,7 @@ vector<char> AvailableMoves(int x, int y) {
     return moves;
 }
 
-
-bool isNextToWall(int X, int Y){
-    return ((Maze[Y - 1][X] == Wall && Maze[Y][X - 1] == Wall ) ||
-            (Maze[Y + 1][X] == Wall && Maze[Y][X - 1] == Wall ) ||
-            (Maze[Y - 1][X] == Wall && Maze[Y][X + 1] == Wall ) ||
-            (Maze[Y + 1][X] == Wall && Maze[Y][X + 1] == Wall ));
-}
-
-void Up() {
+void Left() {
     Maze[StartingPoint.X][StartingPoint.Y] = Robot;
     while (Maze[StartingPoint.X][StartingPoint.Y - 1] == 0 || Maze[StartingPoint.X][StartingPoint.Y - 1] == 'T') {
         Maze[StartingPoint.X][StartingPoint.Y] = Free;
@@ -99,7 +91,7 @@ void Up() {
     sleep(1);
 }
 
-void Down() {
+void Right() {
     Maze[StartingPoint.X][StartingPoint.Y] = Robot;
     while (Maze[StartingPoint.X][StartingPoint.Y + 1] == 0|| Maze[StartingPoint.X][StartingPoint.Y + 1] == 'T') {
         Maze[StartingPoint.X][StartingPoint.Y] = Free;
@@ -110,7 +102,7 @@ void Down() {
     sleep(1);
 }
 
-void Left() {
+void Up() {
     Maze[StartingPoint.X][StartingPoint.Y] = Robot;
     while (Maze[StartingPoint.X - 1][StartingPoint.Y] == 0 || Maze[StartingPoint.X - 1][StartingPoint.Y] == 'T') {
         Maze[StartingPoint.X][StartingPoint.Y] = Free;
@@ -121,7 +113,7 @@ void Left() {
     sleep(1);
 }
 
-void Right() {
+void Down() {
     Maze[StartingPoint.X][StartingPoint.Y] = Robot;
     while (Maze[StartingPoint.X + 1][StartingPoint.Y] == 0 || Maze[StartingPoint.X + 1][StartingPoint.Y] == 'T') {
         Maze[StartingPoint.X][StartingPoint.Y] = Free;
@@ -136,16 +128,14 @@ void Right() {
 
 void Solve()
 {
-
-
     int n;
     n = rand()%4;
-
+    
     switch (n) {
         case 0:
             Up();
             break;
-
+            
         case 1:
             Down();
             break;
@@ -157,16 +147,62 @@ void Solve()
             break;
         default: {break;}
     }
+    
+}
 
+void Solve_manual()
+{
+    int n;
+    
+    cout << "What direction do you want to move in?" << endl;
+    cout << "[0] Up" << endl;
+    cout << "[1] Down" << endl;
+    cout << "[2] Left" << endl;
+    cout << "[3] Right" << endl;
+    
+    cin >> n;
+    
+    switch (n) {
+        case 0:
+            Up();
+            break;
+            
+        case 1:
+            Down();
+            break;
+        case 2:
+            Left();
+            break;
+        case 3:
+            Right();
+            break;
+        default: {break;}
+    }
+    
 }
 
 int main() {
-
+    
     print_maze();
-
-    while(StartingPoint.X != EndingPoint.X || StartingPoint.Y != EndingPoint.Y){
-    Solve();
+    
+    int choice;
+    
+    cout << "What mode do you want to play?" << endl;
+    cout << "[1] Manual" << endl;
+    cout << "[2] Computer" << endl;
+    cin >> choice;
+    
+    if(choice == 1){
+        while(StartingPoint.X != EndingPoint.X || StartingPoint.Y != EndingPoint.Y){
+            Solve_manual();
+        }
     }
-
+    else if(choice == 2){
+        while(StartingPoint.X != EndingPoint.X || StartingPoint.Y != EndingPoint.Y){
+            Solve();
+        }
+    }
+    
+    cout << "Congrats!" << endl;
     return 0;
 }
