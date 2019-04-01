@@ -92,7 +92,7 @@ Coord NextPosition(Coord c, char move) {
 	}
 	if (move == 'D') {
 		while (Maze[newX + 1][newY] == 0 || Maze[newX + 1][newY] == 'T')
-			newX--;
+			newX++;
 	}
 	if (move == 'L') {
 		while (Maze[newX][newY - 1] == 0 || Maze[newX][newY - 1] == 'T')
@@ -185,14 +185,26 @@ void Solve_manual()
 
 	vector<char> moves = AvailableMoves(StartingPoint.X,StartingPoint.Y);
 
-	if (find(moves.begin(),moves.end(),'U') != moves.end())
+	if (find(moves.begin(), moves.end(), 'U') != moves.end()) {
 		cout << "[0] Up" << endl;
-	if (find(moves.begin(), moves.end(), 'D') != moves.end())
+		/*Coord newC = NextPosition(StartingPoint, 'U');
+		cout << newC.X << ", " << newC.Y;*/
+	}
+	if (find(moves.begin(), moves.end(), 'D') != moves.end()) {
 		cout << "[1] Down" << endl;
-	if (find(moves.begin(), moves.end(), 'L') != moves.end())
+		/*Coord newC = NextPosition(StartingPoint, 'D');
+		cout << newC.X << ", " << newC.Y;*/
+	}
+	if (find(moves.begin(), moves.end(), 'L') != moves.end()) {
 		cout << "[2] Left" << endl;
-	if (find(moves.begin(), moves.end(), 'R') != moves.end())
+		/*Coord newC = NextPosition(StartingPoint, 'L');
+		cout << newC.X << ", " << newC.Y;*/
+	}
+	if (find(moves.begin(), moves.end(), 'R') != moves.end()) {
 		cout << "[3] Right" << endl;
+		/*Coord newC = NextPosition(StartingPoint, 'R');
+		cout << newC.X << ", " << newC.Y;*/
+	}
     
     cin >> n;
     
@@ -200,7 +212,6 @@ void Solve_manual()
         case 0:
             Up();
             break;
-            
         case 1:
             Down();
             break;
