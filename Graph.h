@@ -63,7 +63,7 @@ class Graph {
 public:
     int state;
     Vertex *findVertex(Vertex v);
-    bool addVertex(vector<Edge> adj, Coord position, char direction, int depth, int cost);
+    bool addVertex(Coord position, char direction, int depth, int cost);
     bool addEdge(Vertex sourc, Vertex dest, double w);
     int getNumVertex();
     vector<Vertex *> getVertexSet();
@@ -93,9 +93,10 @@ Vertex * Graph::findVertex(Vertex v) {
 }
 
 
-bool Graph::addVertex(vector<Edge> adj, Coord position, char direction, int depth, int cost) {
+bool Graph::addVertex(Coord position, char direction, int depth, int cost) {
     this->state++;
-    Vertex *v = new Vertex(state, adj, false, position, direction, depth, cost);
+	vector<Edge> e;
+    Vertex *v = new Vertex(state, e, false, position, direction, depth, cost);
     vertexSet.push_back(v);
     return true;
 }

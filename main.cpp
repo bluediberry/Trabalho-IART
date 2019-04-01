@@ -3,7 +3,7 @@
 #include <vector>
 #include <stdio.h>
 #include <windows.h>
-#include <ctime>
+//#include <ctime>
 #include "Coord.h"
 #include "Graph.h"
 
