@@ -2,7 +2,6 @@
 #include <cstring>
 #include <vector>
 #include <stdio.h>
-#include <unistd.h>
 #include "Coord.h"
 
 
@@ -29,7 +28,8 @@ char Maze[MazeWidth][MazeHeight] =
     { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
     { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
     { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-    { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }
+    { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+	{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }
 };
 
 const int Wall = 1;
@@ -88,7 +88,6 @@ void Left() {
         StartingPoint.Y--;
     }
     print_maze();
-    sleep(1);
 }
 
 void Right() {
@@ -99,7 +98,6 @@ void Right() {
         StartingPoint.Y++;
     }
     print_maze();
-    sleep(1);
 }
 
 void Up() {
@@ -110,7 +108,6 @@ void Up() {
         StartingPoint.X--;
     }
     print_maze();
-    sleep(1);
 }
 
 void Down() {
@@ -121,7 +118,6 @@ void Down() {
         StartingPoint.X++;
     }
     print_maze();
-    sleep(1);
 }
 
 
