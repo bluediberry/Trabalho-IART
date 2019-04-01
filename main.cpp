@@ -3,6 +3,7 @@
 #include <vector>
 #include <stdio.h>
 #include <windows.h>
+#include <ctime>
 #include "Coord.h"
 
 
@@ -29,7 +30,8 @@ char Maze[MazeWidth][MazeHeight] =
     { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
     { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
     { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-    { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }
+    { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+	{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }
 };
 
 const int Wall = 1;
@@ -186,6 +188,7 @@ int main() {
     print_maze();
     
     int choice;
+	int algorithm;
     
     cout << "What mode do you want to play?" << endl;
     cout << "[1] Manual" << endl;
@@ -198,6 +201,15 @@ int main() {
         }
     }
     else if(choice == 2){
+		cout << "What algorithm should I use?" << endl;
+		cout << "[1] Depth first search" << endl;
+		cout << "[2] Breadth first search" << endl;
+		cout << "[3] Iterative deepening search" << endl;
+		cout << "[4] Uniform cost search" << endl;
+		cout << "[5] Greedy search" << endl;
+		cout << "[6] A* search" << endl;
+		cin >> algorithm;
+
         while(StartingPoint.X != EndingPoint.X || StartingPoint.Y != EndingPoint.Y){
             Solve();
         }
