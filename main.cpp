@@ -71,16 +71,40 @@ void print_maze(){
 }
 
 vector<char> AvailableMoves(int x, int y) {
-    vector<char> moves;
-    if (Maze[x - 1][y] == Free)
-        moves.push_back('L');
-    if (Maze[x + 1][y] == Free)
-        moves.push_back('R');
-    if (Maze[x][y - 1] == Free)
-        moves.push_back('U');
-    if (Maze[x][y + 1] == Free)
-        moves.push_back('D');
+	vector<char> moves;
+	if (Maze[x - 1][y] == Free || Maze[x - 1][y] == Target)
+		moves.push_back('U');
+	if (Maze[x + 1][y] == Free || Maze[x + 1][y] == Target)
+		moves.push_back('D');
+	if (Maze[x][y - 1] == Free || Maze[x][y - 1] == Target)
+		moves.push_back('L');
+	if (Maze[x][y + 1] == Free || Maze[x][y + 1] == Target)
+		moves.push_back('R');
     return moves;
+}
+
+Coord NextPosition(Coord c, char move) {
+	int newX = c.X;
+	int newY = c.Y;
+	if (move == 'U') {
+		while (Maze[newX - 1][newY] == 0 || Maze[newX - 1][newY] == 'T')
+			newX--;
+	}
+	if (move == 'D') {
+		while (Maze[newX + 1][newY] == 0 || Maze[newX + 1][newY] == 'T')
+			newX--;
+	}
+	if (move == 'L') {
+		while (Maze[newX][newY - 1] == 0 || Maze[newX][newY - 1] == 'T')
+			newY--;
+	}
+	if (move == 'R') {
+		while (Maze[newX][newY + 1] == 0 || Maze[newX][newY] == 'T')
+			newY++;
+	}
+
+	Coord newCoord(newX, newY);
+	return newCoord;
 }
 
 void Left() {
@@ -158,10 +182,17 @@ void Solve_manual()
     int n;
     
     cout << "What direction do you want to move in?" << endl;
-    cout << "[0] Up" << endl;
-    cout << "[1] Down" << endl;
-    cout << "[2] Left" << endl;
-    cout << "[3] Right" << endl;
+
+	vector<char> moves = AvailableMoves(StartingPoint.X,StartingPoint.Y);
+
+	if (find(moves.begin(),moves.end(),'U') != moves.end())
+		cout << "[0] Up" << endl;
+	if (find(moves.begin(), moves.end(), 'D') != moves.end())
+		cout << "[1] Down" << endl;
+	if (find(moves.begin(), moves.end(), 'L') != moves.end())
+		cout << "[2] Left" << endl;
+	if (find(moves.begin(), moves.end(), 'R') != moves.end())
+		cout << "[3] Right" << endl;
     
     cin >> n;
     
