@@ -2,12 +2,11 @@
 #include <cstring>
 #include <vector>
 #include <stdio.h>
-#include <windows.h>
-#include <ctime>
+#include <unistd.h>
 #include "Coord.h"
 #include "Graph.h"
 
-
+//Fazer uma funcao getDistanceToWall()?
 using namespace std;
 
 const int MazeHeight = 18;
@@ -31,8 +30,7 @@ char Maze[MazeWidth][MazeHeight] =
     { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
     { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
     { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-    { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-	{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }
+    { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }
 };
 
 const int Wall = 1;
@@ -71,40 +69,22 @@ void print_maze(){
 }
 
 vector<char> AvailableMoves(int x, int y) {
-	vector<char> moves;
-	if (Maze[x - 1][y] == Free || Maze[x - 1][y] == Target)
-		moves.push_back('U');
-	if (Maze[x + 1][y] == Free || Maze[x + 1][y] == Target)
-		moves.push_back('D');
-	if (Maze[x][y - 1] == Free || Maze[x][y - 1] == Target)
-		moves.push_back('L');
-	if (Maze[x][y + 1] == Free || Maze[x][y + 1] == Target)
-		moves.push_back('R');
+    vector<char> moves;
+    if (Maze[x - 1][y] == Free)
+        moves.push_back('U');
+    if (Maze[x + 1][y] == Free)
+        moves.push_back('D');
+    if (Maze[x][y - 1] == Free)
+        moves.push_back('L');
+    if (Maze[x][y + 1] == Free)
+        moves.push_back('R');
+    
+    for(int i = 0; i < moves.size(); i++){
+        cout << moves[i] << endl;
+        
+    }
+    
     return moves;
-}
-
-Coord NextPosition(Coord c, char move) {
-	int newX = c.X;
-	int newY = c.Y;
-	if (move == 'U') {
-		while (Maze[newX - 1][newY] == 0 || Maze[newX - 1][newY] == 'T')
-			newX--;
-	}
-	if (move == 'D') {
-		while (Maze[newX + 1][newY] == 0 || Maze[newX + 1][newY] == 'T')
-			newX++;
-	}
-	if (move == 'L') {
-		while (Maze[newX][newY - 1] == 0 || Maze[newX][newY - 1] == 'T')
-			newY--;
-	}
-	if (move == 'R') {
-		while (Maze[newX][newY + 1] == 0 || Maze[newX][newY] == 'T')
-			newY++;
-	}
-
-	Coord newCoord(newX, newY);
-	return newCoord;
 }
 
 void Left() {
@@ -115,7 +95,7 @@ void Left() {
         StartingPoint.Y--;
     }
     print_maze();
-    Sleep(1);
+    sleep(1);
 }
 
 void Right() {
@@ -126,7 +106,7 @@ void Right() {
         StartingPoint.Y++;
     }
     print_maze();
-    Sleep(1);
+    sleep(1);
 }
 
 void Up() {
@@ -137,7 +117,7 @@ void Up() {
         StartingPoint.X--;
     }
     print_maze();
-    Sleep(1);
+    sleep(1);
 }
 
 void Down() {
@@ -148,7 +128,7 @@ void Down() {
         StartingPoint.X++;
     }
     print_maze();
-    Sleep(1);
+    sleep(1);
 }
 
 
@@ -176,35 +156,87 @@ void Solve()
     }
     
 }
+Graph Create_Graph(){
+    
+    Graph *g = new Graph();
+    
+    g->addVertex(StartingPoint, NULL, 0, 0);
+    
+    vector<char> moves = AvailableMoves(StartingPoint.X, StartingPoint.Y);
+    
+    for (int i = 0; i < moves.size(); i++) {
+        switch (moves[i]) {
+            case 'U':
+                g->addVertex(StartingPoint, NULL, 0, 0);
+                break;
+            case 'D':
+                g->addVertex(StartingPoint, NULL, 0, 0);
+                break;
+            case 'R':
+                g->addVertex(StartingPoint, NULL, 0, 0);
+                break;
+            case 'L':
+                g->addVertex(StartingPoint, NULL, 0, 0);
+                break;
+                
+            default:
+                break;
+        }
+    }
+    
+    return *g;
+}
+
+
+void DFS( )
+{
+    Create_Graph();
+    
+    print_maze();
+    sleep(1);
+    
+    // Recursively search for our goal.
+    /*if (Maze[X - 1][Y]  == 0 || Maze[X - 1][Y]  == 'T')
+    {
+        Up();
+        Solve(X - 1, Y);
+    }
+    if (Maze[X + 1][Y]  == 0 || Maze[X - 1][Y]  == 'T')
+    {
+        Down();
+        Solve(X + 1, Y);
+    }
+    if (Maze[X][Y - 1]  == 0 || Maze[X][Y - 1]  == 'T')
+    {
+        Left();
+        Solve(X, Y - 1);
+
+    }
+    if (Maze[X][Y + 1]  == 0 || Maze[X][Y + 1]  == 'T')
+    {
+        Right();
+        Solve(X, Y + 1);
+    }
+    
+    // Otherwise we need to backtrack and find another solution.
+    //Maze[X][Y] = Free;
+    
+    print_maze();
+    sleep(1);*/
+    
+}
+
+
 
 void Solve_manual()
 {
     int n;
     
     cout << "What direction do you want to move in?" << endl;
-
-	vector<char> moves = AvailableMoves(StartingPoint.X,StartingPoint.Y);
-
-	if (find(moves.begin(), moves.end(), 'U') != moves.end()) {
-		cout << "[0] Up" << endl;
-		/*Coord newC = NextPosition(StartingPoint, 'U');
-		cout << newC.X << ", " << newC.Y;*/
-	}
-	if (find(moves.begin(), moves.end(), 'D') != moves.end()) {
-		cout << "[1] Down" << endl;
-		/*Coord newC = NextPosition(StartingPoint, 'D');
-		cout << newC.X << ", " << newC.Y;*/
-	}
-	if (find(moves.begin(), moves.end(), 'L') != moves.end()) {
-		cout << "[2] Left" << endl;
-		/*Coord newC = NextPosition(StartingPoint, 'L');
-		cout << newC.X << ", " << newC.Y;*/
-	}
-	if (find(moves.begin(), moves.end(), 'R') != moves.end()) {
-		cout << "[3] Right" << endl;
-		/*Coord newC = NextPosition(StartingPoint, 'R');
-		cout << newC.X << ", " << newC.Y;*/
-	}
+    cout << "[0] Up" << endl;
+    cout << "[1] Down" << endl;
+    cout << "[2] Left" << endl;
+    cout << "[3] Right" << endl;
     
     cin >> n;
     
@@ -212,6 +244,7 @@ void Solve_manual()
         case 0:
             Up();
             break;
+            
         case 1:
             Down();
             break;
@@ -231,7 +264,8 @@ int main() {
     print_maze();
     
     int choice;
-	int algorithm;
+    int algorithm;
+
     
     cout << "What mode do you want to play?" << endl;
     cout << "[1] Manual" << endl;
@@ -244,20 +278,22 @@ int main() {
         }
     }
     else if(choice == 2){
-		cout << "What algorithm should I use?" << endl;
-		cout << "[1] Depth first search" << endl;
-		cout << "[2] Breadth first search" << endl;
-		cout << "[3] Iterative deepening search" << endl;
-		cout << "[4] Uniform cost search" << endl;
-		cout << "[5] Greedy search" << endl;
-		cout << "[6] A* search" << endl;
-		cin >> algorithm;
-
+        cout << "What algorithm should I use?" << endl;
+        cout << "[1] Depth first search" << endl;
+        cout << "[2] Breadth first search" << endl;
+        cout << "[3] Iterative deepening search" << endl;
+        cout << "[4] Uniform cost search" << endl;
+        cout << "[5] Greedy search" << endl;
+        cout << "[6] A* search" << endl;
+        cin >> algorithm;
+        
         while(StartingPoint.X != EndingPoint.X || StartingPoint.Y != EndingPoint.Y){
-            Solve();
+            DFS();
         }
     }
+    
     
     cout << "Congrats!" << endl;
     return 0;
 }
+
