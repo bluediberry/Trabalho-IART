@@ -95,9 +95,9 @@ Vertex * Graph::findVertex(Vertex v) {
 
 bool Graph::addVertex(Coord position, char direction, int depth, int cost) {
     this->state++;
-	vector<Edge> e;
+    vector<Edge> e;
     Vertex *v = new Vertex(state, e, false, position, direction, depth, cost);
-    vertexSet.push_back(v);
+    this->vertexSet.push_back(v);
     return true;
 }
 

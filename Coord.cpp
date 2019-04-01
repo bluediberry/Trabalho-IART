@@ -11,3 +11,20 @@
 		X = coord.X; Y = coord.Y;
 	}
 
+int Coord::GetRow(){
+    return X;
+}
+
+int Coord::GetColumn(){
+    return Y;
+}
+
+char Coord::GetCounter(){
+    return counter;
+}
+
+void Coord::IncrementCounter(){
+    counter++;
+}
+
+
