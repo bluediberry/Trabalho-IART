@@ -5,6 +5,7 @@
 #include <windows.h>
 #include <ctime>
 #include "Coord.h"
+#include "Graph.h"
 
 
 using namespace std;
