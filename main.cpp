@@ -2,8 +2,7 @@
 #include <cstring>
 #include <vector>
 #include <stdio.h>
-#include <windows.h>
-//#include <ctime>
+#include <unistd.h>
 #include "Coord.h"
 #include "Graph.h"
 
@@ -173,29 +172,70 @@ void Solve()
             break;
         default: {break;}
     }
-    
 }
+
+void addChildren(Graph g, Coord position, int depth, int cost){
+    
+    vector<char> moves = AvailableMoves(position.X, position.Y);
+    
+    for (int i = 0; i < moves.size(); i++) {
+        depth++;
+        cost++;
+        switch (moves[i]) {
+            case 'U':
+                g.addVertex(NextPosition(position, 'U'), NULL, depth, cost);
+                addChildren(g, NextPosition(position, 'U'), depth, cost);
+                break;
+            case 'D':
+                g.addVertex(NextPosition(StartingPoint, 'D'), NULL, depth, cost);
+                addChildren(g, NextPosition(position, 'U'), depth, cost);
+                break;
+            case 'R':
+                g.addVertex(NextPosition(StartingPoint, 'R'), NULL, depth, cost);
+                addChildren(g, NextPosition(position, 'U'), depth, cost);
+                break;
+            case 'L':
+                g.addVertex(NextPosition(StartingPoint, 'L'), NULL, depth, cost);
+                addChildren(g, NextPosition(position, 'U'), depth, cost);
+                break;
+                
+            default:
+                break;
+        }
+    }
+}
+
+
 Graph Create_Graph(){
     
     Graph *g = new Graph();
     
-    g->addVertex(StartingPoint, NULL, 0, 0);
+    int depth = 0;
+    int cost = 0;
+    
+    g->addVertex(StartingPoint, NULL, depth, cost);
     
     vector<char> moves = AvailableMoves(StartingPoint.X, StartingPoint.Y);
     
     for (int i = 0; i < moves.size(); i++) {
+        depth++;
+        cost++;
         switch (moves[i]) {
             case 'U':
-                g->addVertex(StartingPoint, NULL, 0, 0);
+                g->addVertex(NextPosition(StartingPoint, 'U'), NULL, depth, cost);
+                addChildren(*g, NextPosition(StartingPoint, 'U'), depth, cost);
                 break;
             case 'D':
-                g->addVertex(StartingPoint, NULL, 0, 0);
+                g->addVertex(NextPosition(StartingPoint, 'D'), NULL, depth, cost);
+                addChildren(*g, NextPosition(StartingPoint, 'D'), depth, cost);
                 break;
             case 'R':
-                g->addVertex(StartingPoint, NULL, 0, 0);
+                g->addVertex(NextPosition(StartingPoint, 'R'), NULL, depth, cost);
+                addChildren(*g, NextPosition(StartingPoint, 'R'), depth, cost);
                 break;
             case 'L':
-                g->addVertex(StartingPoint, NULL, 0, 0);
+                g->addVertex(NextPosition(StartingPoint, 'L'), NULL, depth, cost);
+                addChildren(*g, NextPosition(StartingPoint, 'L'), depth, cost);
                 break;
                 
             default:
@@ -207,44 +247,41 @@ Graph Create_Graph(){
 }
 
 
-void DFS( )
+void dfsVisit(Vertex *v, vector<Vertex *> & res) {
+    v->visited = true;
+    res.push_back(v);
+    typename vector<Edge>::iterator it = v->adj.begin();
+    /*for(it; it != v->adj.end(); it++){
+     if(!it->getDest()){
+     dfsVisit(it->dest, res);
+     }
+     }*/
+}
+
+vector<Vertex *> DFS( )
 {
-    Create_Graph();
+    Graph g = Create_Graph();
     
     print_maze();
     sleep(1);
     
-    // Recursively search for our goal.
-    /*if (Maze[X - 1][Y]  == 0 || Maze[X - 1][Y]  == 'T')
-     {
-     Up();
-     Solve(X - 1, Y);
-     }
-     if (Maze[X + 1][Y]  == 0 || Maze[X - 1][Y]  == 'T')
-     {
-     Down();
-     Solve(X + 1, Y);
-     }
-     if (Maze[X][Y - 1]  == 0 || Maze[X][Y - 1]  == 'T')
-     {
-     Left();
-     Solve(X, Y - 1);
-     
-     }
-     if (Maze[X][Y + 1]  == 0 || Maze[X][Y + 1]  == 'T')
-     {
-     Right();
-     Solve(X, Y + 1);
-     }
-     
-     // Otherwise we need to backtrack and find another solution.
-     //Maze[X][Y] = Free;
-     
-     print_maze();
-     sleep(1);*/
     
+    vector<Vertex *> res;
+    vector<Vertex *> vertexSet = g.getVertexSet();
+    typename vector<Vertex *>::const_iterator it;
+    
+    for(it = vertexSet.begin(); it != vertexSet.end(); it++){
+        (*it)->visited = false;
+    }
+    
+    
+    for(it  = vertexSet.begin(); it != vertexSet.end(); it++){
+        if(!(*it)->visited){
+            dfsVisit(*it, res);
+        }
+    }
+    return res;
 }
-
 
 
 void Solve_manual()
