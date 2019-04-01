@@ -263,13 +263,14 @@ Graph Create_Graph(){
 void dfsVisit(Vertex *v, vector<Vertex *> & res) {
     v->visited = true;
     res.push_back(v);
-    typename vector<Edge>::iterator it = v->adj.begin();
-    for(it; it != v->adj.end(); it++){
+    typename vector<Edge>::iterator it;
+    for(it = v->adj.begin(); it != v->adj.end(); it++){
         if(!it->dest){
             dfsVisit(it->dest, res);
         }
     }
 }
+
 
 vector<Vertex *> DFS( )
 {
