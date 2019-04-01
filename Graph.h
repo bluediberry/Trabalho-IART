@@ -9,6 +9,7 @@
 
 using namespace std;
 
+
 class Vertex {
 public:
 	int state; //state
@@ -59,7 +60,7 @@ class Graph {
 
 
 public:
-	int state;
+	int id;
 	Vertex *findVertex(Vertex v);
 	bool addVertex(vector<Edge> adj, Coord position, char direction, int depth, int cost);
 	bool addEdge(Vertex sourc, Vertex dest, double w);
@@ -88,8 +89,8 @@ Vertex * Graph::findVertex(Vertex v) {
 
 
 bool Graph::addVertex(vector<Edge> adj, Coord position, char direction, int depth, int cost) {
-	this->state++;
-	Vertex *v = new Vertex(state, adj, false, position, direction, depth, cost);
+	this->id++;
+	Vertex *v = new Vertex(id, adj, false, position, direction, depth, cost);
 	vertexSet.push_back(v);
 	return true;
 }
