@@ -35,6 +35,14 @@ public:
         this->cost = cost;
     }
     
+    Vertex(Coord position, char direction, int depth, int cost) {
+        this->position = position;
+        this->direction = direction;
+        this->depth = depth;
+        this->cost = cost;
+    }
+    
+    
     Coord getPosition() {
         return this->position;
     }
@@ -43,9 +51,9 @@ public:
 
 
 class Edge {
-    Vertex * dest;      // destination vertex
     double weight;         // edge weight
 public:
+    Vertex* dest;      // destination vertex
     Edge(Vertex *d, double w);
     friend class Graph;
     friend class Vertex;

@@ -178,29 +178,36 @@ void addChildren(Graph g, Coord position, int depth, int cost){
     
     vector<char> moves = AvailableMoves(position.X, position.Y);
     
-    for (int i = 0; i < moves.size(); i++) {
-        depth++;
-        cost++;
-        switch (moves[i]) {
-            case 'U':
+    Vertex *v = new Vertex(position, NULL, depth, cost);
+    
+    while (depth < 10) {
+        for (int i = 0; i < moves.size(); i++) {
+            depth++;
+            cost++;
+            if (moves[i] == 'U') {
                 g.addVertex(NextPosition(position, 'U'), NULL, depth, cost);
+                Vertex *nextv = new Vertex(NextPosition(position, 'U'), NULL, depth, cost);
+                g.addEdge(*v, *nextv, 1);
                 addChildren(g, NextPosition(position, 'U'), depth, cost);
-                break;
-            case 'D':
-                g.addVertex(NextPosition(StartingPoint, 'D'), NULL, depth, cost);
-                addChildren(g, NextPosition(position, 'U'), depth, cost);
-                break;
-            case 'R':
-                g.addVertex(NextPosition(StartingPoint, 'R'), NULL, depth, cost);
-                addChildren(g, NextPosition(position, 'U'), depth, cost);
-                break;
-            case 'L':
-                g.addVertex(NextPosition(StartingPoint, 'L'), NULL, depth, cost);
-                addChildren(g, NextPosition(position, 'U'), depth, cost);
-                break;
-                
-            default:
-                break;
+            }
+            else if (moves[i] == 'D') {
+                g.addVertex(NextPosition(position, 'D'), NULL, depth, cost);
+                Vertex *nextv = new Vertex(NextPosition(position, 'D'), NULL, depth, cost);
+                g.addEdge(*v, *nextv, 1);
+                addChildren(g, NextPosition(position, 'D'), depth, cost);
+            }
+            else if (moves[i] == 'R') {
+                g.addVertex(NextPosition(position, 'R'), NULL, depth, cost);
+                Vertex *nextv = new Vertex(NextPosition(position, 'R'), NULL, depth, cost);
+                g.addEdge(*v, *nextv, 1);
+                addChildren(g, NextPosition(position, 'R'), depth, cost);
+            }
+            else if (moves[i] == 'L') {
+                g.addVertex(NextPosition(position, 'L'), NULL, depth, cost);
+                Vertex *nextv = new Vertex(NextPosition(position, 'L'), NULL, depth, cost);
+                g.addEdge(*v, *nextv, 1);
+                addChildren(g, NextPosition(position, 'L'), depth, cost);
+            }
         }
     }
 }
@@ -215,32 +222,38 @@ Graph Create_Graph(){
     
     g->addVertex(StartingPoint, NULL, depth, cost);
     
+    Vertex *v = new Vertex(StartingPoint, NULL, depth, cost);
+    
     vector<char> moves = AvailableMoves(StartingPoint.X, StartingPoint.Y);
     
     for (int i = 0; i < moves.size(); i++) {
         depth++;
         cost++;
-        switch (moves[i]) {
-            case 'U':
-                g->addVertex(NextPosition(StartingPoint, 'U'), NULL, depth, cost);
-                addChildren(*g, NextPosition(StartingPoint, 'U'), depth, cost);
-                break;
-            case 'D':
-                g->addVertex(NextPosition(StartingPoint, 'D'), NULL, depth, cost);
-                addChildren(*g, NextPosition(StartingPoint, 'D'), depth, cost);
-                break;
-            case 'R':
-                g->addVertex(NextPosition(StartingPoint, 'R'), NULL, depth, cost);
-                addChildren(*g, NextPosition(StartingPoint, 'R'), depth, cost);
-                break;
-            case 'L':
-                g->addVertex(NextPosition(StartingPoint, 'L'), NULL, depth, cost);
-                addChildren(*g, NextPosition(StartingPoint, 'L'), depth, cost);
-                break;
-                
-            default:
-                break;
+        if (moves[i] == 'U') {
+            g->addVertex(NextPosition(StartingPoint, 'U'), NULL, depth, cost);
+            Vertex *nextv = new Vertex(NextPosition(StartingPoint, 'U'), NULL, depth, cost);
+            g->addEdge(*v, *nextv, 1);
+            addChildren(*g, NextPosition(StartingPoint, 'U'), depth, cost);
         }
+        else if (moves[i] == 'D') {
+            g->addVertex(NextPosition(StartingPoint, 'D'), NULL, depth, cost);
+            Vertex *nextv = new Vertex(NextPosition(StartingPoint, 'D'), NULL, depth, cost);
+            g->addEdge(*v, *nextv, 1);
+            addChildren(*g, NextPosition(StartingPoint, 'D'), depth, cost);
+        }
+        else if (moves[i] == 'R') {
+            g->addVertex(NextPosition(StartingPoint, 'R'), NULL, depth, cost);
+            Vertex *nextv = new Vertex(NextPosition(StartingPoint, 'R'), NULL, depth, cost);
+            g->addEdge(*v, *nextv, 1);
+            addChildren(*g, NextPosition(StartingPoint, 'R'), depth, cost);
+        }
+        else if (moves[i] == 'L') {
+            g->addVertex(NextPosition(StartingPoint, 'L'), NULL, depth, cost);
+            Vertex *nextv = new Vertex(NextPosition(StartingPoint, 'L'), NULL, depth, cost);
+            g->addEdge(*v, *nextv, 1);
+            addChildren(*g, NextPosition(StartingPoint, 'L'), depth, cost);
+        }
+        
     }
     
     return *g;
@@ -251,11 +264,11 @@ void dfsVisit(Vertex *v, vector<Vertex *> & res) {
     v->visited = true;
     res.push_back(v);
     typename vector<Edge>::iterator it = v->adj.begin();
-    /*for(it; it != v->adj.end(); it++){
-     if(!it->getDest()){
-     dfsVisit(it->dest, res);
-     }
-     }*/
+    for(it; it != v->adj.end(); it++){
+        if(!it->dest){
+            dfsVisit(it->dest, res);
+        }
+    }
 }
 
 vector<Vertex *> DFS( )
