@@ -2,7 +2,7 @@
 #include <cstring>
 #include <vector>
 #include <stdio.h>
-#include <unistd.h>
+#include <windows.h>
 #include "Coord.h"
 
 
@@ -88,7 +88,7 @@ void Left() {
         StartingPoint.Y--;
     }
     print_maze();
-    sleep(1);
+    Sleep(1);
 }
 
 void Right() {
@@ -99,7 +99,7 @@ void Right() {
         StartingPoint.Y++;
     }
     print_maze();
-    sleep(1);
+    Sleep(1);
 }
 
 void Up() {
@@ -110,7 +110,7 @@ void Up() {
         StartingPoint.X--;
     }
     print_maze();
-    sleep(1);
+    Sleep(1);
 }
 
 void Down() {
@@ -121,7 +121,7 @@ void Down() {
         StartingPoint.X++;
     }
     print_maze();
-    sleep(1);
+    Sleep(1);
 }
 
 

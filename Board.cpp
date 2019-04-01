@@ -1,6 +1,6 @@
 #include "Board.h"
 
-char Level1(const int MazeHeight,const int MazeWidth) {
+/*char Level1(const int MazeHeight,const int MazeWidth) {
 
 	char Maze[MazeHeight][MazeWidth] =
 	{
@@ -25,4 +25,4 @@ char Level1(const int MazeHeight,const int MazeWidth) {
 
 	return Maze;
 
-}
+}*/
