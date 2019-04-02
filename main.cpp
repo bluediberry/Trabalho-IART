@@ -214,7 +214,8 @@ Graph Create_Graph(){
     
     int depth = 0;
     
-	Vertex *v = g->addVertex(StartingPoint, NULL, depth);
+	g->addVertex(StartingPoint, NULL, depth);
+	Vertex *v= g->getVertexSet().back();
     
     
     vector<char> moves = AvailableMoves(StartingPoint.X, StartingPoint.Y);

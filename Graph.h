@@ -80,7 +80,7 @@ class Graph {
 public:
     int state;
     Vertex *findVertex(Vertex v);
-    Vertex * addVertex(Coord position, char direction, int depth);
+    bool addVertex(Coord position, char direction, int depth);
     bool addEdge(Vertex sourc, Vertex dest, double w);
     int getNumVertex();
     vector<Vertex *> getVertexSet();
@@ -110,12 +110,12 @@ Vertex * Graph::findVertex(Vertex v) {
 }
 
 
-Vertex * Graph::addVertex(Coord position, char direction, int depth) {
+bool Graph::addVertex(Coord position, char direction, int depth) {
     this->state++;
     vector<Edge> e;
     Vertex *v = new Vertex(state, e, false, position, direction, depth);
     this->vertexSet.push_back(v);
-    return v;
+    return true;
 }
 
 bool Graph::addEdge(Vertex sourc, Vertex dest, double w) {
