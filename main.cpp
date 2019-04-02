@@ -1,4 +1,4 @@
-#include <unistd.h>
+#include <windows.h>
 #include <iostream>
 #include <cstring>
 #include <vector>
@@ -115,7 +115,7 @@ void Left() {
         StartingPoint.Y--;
     }
     print_maze();
-    sleep(1);
+    Sleep(1);
 }
 
 void Right() {
@@ -126,7 +126,7 @@ void Right() {
         StartingPoint.Y++;
     }
     print_maze();
-    sleep(1);
+    Sleep(1);
 }
 
 void Up() {
@@ -137,7 +137,7 @@ void Up() {
         StartingPoint.X--;
     }
     print_maze();
-    sleep(1);
+    Sleep(1);
 }
 
 void Down() {
@@ -148,10 +148,26 @@ void Down() {
         StartingPoint.X++;
     }
     print_maze();
-    sleep(1);
+    Sleep(1);
 }
 
+int Manhattan(Coord current, Coord destination) {
+	int cX = current.X;
+	int cY = current.Y;
+	int dX = destination.X;
+	int dY = destination.Y;
+	int result = abs(cX - dX) + abs(cY - dY);
+	return result;
+}
 
+int Euclidean(Coord current, Coord destination) {
+	int cX = current.X;
+	int cY = current.Y;
+	int dX = destination.X;
+	int dY = destination.Y;
+	int result = sqrt(abs(cX - dX) * 2 + abs(cY - dY) * 2);
+	return result;
+}
 
 void Solve()
 {
@@ -489,8 +505,8 @@ int main() {
     }
 
 
-    
-    cout << "Congrats!" << endl;
+    if(StartingPoint.X == EndingPoint.X && StartingPoint.Y == EndingPoint.Y)
+		cout << "Congrats!" << endl;
     return 0;
 }
 
