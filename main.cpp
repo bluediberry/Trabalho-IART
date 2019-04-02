@@ -1,8 +1,8 @@
-#include <windows.h>
 #include <unistd.h>
 #include <iostream>
 #include <cstring>
 #include <vector>
+#include <queue>
 #include <stdio.h>
 #include "Coord.h"
 #include "Graph.h"
@@ -114,7 +114,7 @@ void Left() {
         StartingPoint.Y--;
     }
     print_maze();
-    Sleep(1);
+    sleep(1);
 }
 
 void Right() {
@@ -125,7 +125,7 @@ void Right() {
         StartingPoint.Y++;
     }
     print_maze();
-    Sleep(1);
+    sleep(1);
 }
 
 void Up() {
@@ -136,7 +136,7 @@ void Up() {
         StartingPoint.X--;
     }
     print_maze();
-    Sleep(1);
+    sleep(1);
 }
 
 void Down() {
@@ -147,7 +147,7 @@ void Down() {
         StartingPoint.X++;
     }
     print_maze();
-    Sleep(1);
+    sleep(1);
 }
 
 
@@ -262,12 +262,12 @@ void dfsVisit(Vertex *v, vector<Vertex *> & res) {
 }
 
 
-vector<Vertex *> DFS( )
+vector<Vertex *> DFS()
 {
     Graph g = Create_Graph();
     
     print_maze();
-    Sleep(1);
+    sleep(1);
     
     
     vector<Vertex *> res;
@@ -283,6 +283,44 @@ vector<Vertex *> DFS( )
         if(!(*it)->visited){
             dfsVisit(*it, res);
         }
+    }
+    return res;
+}
+
+vector<Vertex *> BFS(Graph g, Vertex *v)
+{
+    queue<Vertex *> temp;
+    vector<Vertex *> res;
+    
+    vector<Vertex *> vertexSet = g.getVertexSet();
+    typename vector<Vertex *>::const_iterator it;
+    
+    for(it = vertexSet.begin(); it != vertexSet.end(); it++){
+        (*it)->visited = false;
+    }
+    
+    temp.push(*vertexSet.begin()); //por na queue
+    
+    while (!temp.empty())
+    {
+        
+        Vertex* vertex = temp.front();
+        
+        if (vertex->getPosition().X == EndingPoint.X && vertex->getPosition().Y == EndingPoint.Y) {
+            
+            return res;
+        }
+        
+        vertex->visited = true;
+        temp.pop(); //tirar da queue
+        res.push_back(vertex);
+        typename vector<Edge>::iterator it;
+        for (it = vertex->adj.begin(); it != vertex->adj.end(); it++){
+            if(!it->dest->visited){
+                temp.push(it->dest);
+            }
+        }
+        
     }
     return res;
 }
@@ -344,6 +382,8 @@ int main() {
     int choice;
     int algorithm;
     vector<Vertex *> searchResult;
+    Graph g = Create_Graph();
+    
     
     cout << "What mode do you want to play?" << endl;
     cout << "[1] Manual" << endl;
@@ -365,14 +405,16 @@ int main() {
         cout << "[6] A* search" << endl;
         cin >> algorithm;
         
-        // while(StartingPoint.X != EndingPoint.X || StartingPoint.Y != EndingPoint.Y){
-        searchResult = DFS();
+        searchResult = BFS(g, g.getVertexSet().front());
         int s = searchResult.size();
-        cout << "Coordinates on last vertex: ( " << searchResult.at(s - 1)->getPosition().X << ", " << searchResult.at(s - 1)->getPosition().Y << ")" << endl;
-        //  }
+        
+        for(int i = 0; i < s ; i++){
+            cout << "Coordinates: (" << searchResult.at(i)->getPosition().X << ", " << searchResult.at(i)->getPosition().Y << ")" << endl;
+        }
+        cout << "Coordinates on last vertex: (" << searchResult.at(s - 1)->getPosition().X << ", " << searchResult.at(s - 1)->getPosition().Y << ")" << endl;
     }
     
-	if (StartingPoint.X == EndingPoint.X && StartingPoint.Y == EndingPoint.Y)
+    
     cout << "Congrats!" << endl;
     return 0;
 }
