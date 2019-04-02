@@ -386,20 +386,20 @@ vector<Vertex *> BFS(Graph g, Vertex *v)
 
     temp.push(*g.vertexSet.begin()); //por na queue
 
-        while (!temp.empty())
-        {
+    while (!temp.empty())
+    {
 
-            Vertex* vertex = temp.front();
+        Vertex* vertex = temp.front();
 
-            vertex->visited = true;
-            temp.pop(); //tirar da queue
-            res.push_back(vertex);
-            typename vector<Edge>::iterator it;
-            for (it = vertex->adj.begin(); it != vertex->adj.end(); it++){
-                if(!it->dest->visited){
-                    temp.push(it->dest);
-                    nodes++;
-                }
+        vertex->visited = true;
+        temp.pop(); //tirar da queue
+        res.push_back(vertex);
+        typename vector<Edge>::iterator it;
+        for (it = vertex->adj.begin(); it != vertex->adj.end(); it++){
+            if(!it->dest->visited){
+                temp.push(it->dest);
+                nodes++;
+            }
         }
     }
     return res;
@@ -525,13 +525,13 @@ int main() {
         long int s = searchResult.size();
 
         /*for(int i = 0; i < s ; i++){
-            cout << "Coordinates: (" << searchResult.at(i)->getPosition().X << ", " << searchResult.at(i)->getPosition().Y << ")" << endl;
-        }*/
+         cout << "Coordinates: (" << searchResult.at(i)->getPosition().X << ", " << searchResult.at(i)->getPosition().Y << ")" << endl;
+         }*/
         cout << "Coordinates on last vertex: (" << searchResult.at(s - 1)->getPosition().X << ", " << searchResult.at(s -1)->getPosition().Y << ")" << endl << endl;;
     }
 
     /*if(StartingPoint.X == EndingPoint.X && StartingPoint.Y == EndingPoint.Y)
-        cout << "Congrats!" << endl;*/
+     cout << "Congrats!" << endl;*/
 
     return 0;
 }
