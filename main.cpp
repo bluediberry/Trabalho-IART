@@ -1,8 +1,9 @@
+#include <windows.h>
+#include <unistd.h>
 #include <iostream>
 #include <cstring>
 #include <vector>
 #include <stdio.h>
-#include <windows.h>
 #include "Coord.h"
 #include "Graph.h"
 
@@ -179,32 +180,32 @@ void addChildren(Graph g, Vertex *v){
     vector<char> moves = AvailableMoves(v->getPosition().X, v->getPosition().Y);
     
     
-//    while (depth < 10) {
+    while (v->getDepth() < 15) {
         for (int i = 0; i < moves.size(); i++) {
-            //depth++;
-            if (moves[i] == 'U' && v->getDirection()!='D') {             
-                Vertex *nextv = g.addVertex(NextPosition(v->getPosition(), 'U'), 'U', v->getDepth()+1);
+            v->addDepth();
+            if (moves[i] == 'U' && v->getDirection()!='D') {
+                Vertex *nextv = g.addVertex(NextPosition(v->getPosition(), 'U'), 'U', v->getDepth());
                 g.addEdge(*v, *nextv, 1);
                 addChildren(g, nextv);
             }
             else if (moves[i] == 'D' && v->getDirection() != 'U') {
                 
-                Vertex *nextv = g.addVertex(NextPosition(v->getPosition(), 'D'), 'D', v->getDepth() + 1);
+                Vertex *nextv = g.addVertex(NextPosition(v->getPosition(), 'D'), 'D', v->getDepth());
                 g.addEdge(*v, *nextv, 1);
-				addChildren(g, nextv);
+                addChildren(g, nextv);
             }
-            else if (moves[i] == 'R' && v->getDirection() != 'L') {               
-                Vertex *nextv = g.addVertex(NextPosition(v->getPosition(), 'R'), 'R', v->getDepth() + 1);
+            else if (moves[i] == 'R' && v->getDirection() != 'L') {
+                Vertex *nextv = g.addVertex(NextPosition(v->getPosition(), 'R'), 'R', v->getDepth());
                 g.addEdge(*v, *nextv, 1);
-				addChildren(g, nextv);
+                addChildren(g, nextv);
             }
-            else if (moves[i] == 'L' && v->getDirection() != 'R') {                
-                Vertex *nextv = g.addVertex(NextPosition(v->getPosition(), 'L'), 'L', v->getDepth() + 1);
+            else if (moves[i] == 'L' && v->getDirection() != 'R') {
+                Vertex *nextv = g.addVertex(NextPosition(v->getPosition(), 'L'), 'L', v->getDepth());
                 g.addEdge(*v, *nextv, 1);
-				addChildren(g, nextv);
+                addChildren(g, nextv);
             }
         }
-   // }
+    }
 }
 
 
@@ -212,33 +213,32 @@ Graph Create_Graph(){
     
     Graph *g = new Graph();
     
-    int depth = 0;
-    
-	Vertex *v = g->addVertex(StartingPoint, NULL, depth);
+    Vertex *v = g->addVertex(StartingPoint, NULL, 0);
     
     
     vector<char> moves = AvailableMoves(StartingPoint.X, StartingPoint.Y);
     
     for (int i = 0; i < moves.size(); i++) {
+        v->addDepth();
         if (moves[i] == 'U') {
-			Vertex *nextv = g->addVertex(NextPosition(StartingPoint, 'U'), 'U', depth+1);
+            Vertex *nextv = g->addVertex(NextPosition(StartingPoint, 'U'), 'U', v->getDepth());
             g->addEdge(*v, *nextv, 1);
             addChildren(*g, nextv);
         }
         else if (moves[i] == 'D') {
-			Vertex *nextv = g->addVertex(NextPosition(StartingPoint, 'D'), 'D', depth+1);
-			g->addEdge(*v, *nextv, 1);
-			addChildren(*g, nextv);
+            Vertex *nextv = g->addVertex(NextPosition(StartingPoint, 'D'), 'D',  v->getDepth());
+            g->addEdge(*v, *nextv, 1);
+            addChildren(*g, nextv);
         }
         else if (moves[i] == 'R') {
-			Vertex *nextv = g->addVertex(NextPosition(StartingPoint, 'R'), 'R', depth);
-			g->addEdge(*v, *nextv, 1);
-			addChildren(*g, nextv);
+            Vertex *nextv = g->addVertex(NextPosition(StartingPoint, 'R'), 'R',  v->getDepth());
+            g->addEdge(*v, *nextv, 1);
+            addChildren(*g, nextv);
         }
         else if (moves[i] == 'L') {
-			Vertex *nextv = g->addVertex(NextPosition(StartingPoint, 'L'), 'L', depth);
-			g->addEdge(*v, *nextv, 1);
-			addChildren(*g, nextv);
+            Vertex *nextv = g->addVertex(NextPosition(StartingPoint, 'L'), 'L',  v->getDepth());
+            g->addEdge(*v, *nextv, 1);
+            addChildren(*g, nextv);
         }
         
     }
@@ -250,9 +250,9 @@ Graph Create_Graph(){
 void dfsVisit(Vertex *v, vector<Vertex *> & res) {
     v->visited = true;
     res.push_back(v);
-/*	if(v->getPosition!=EndingPoint)
-		dfsVisit(v->adj.at(0).dest, res);*/
-
+    /*    if(v->getPosition!=EndingPoint)
+     dfsVisit(v->adj.at(0).dest, res);*/
+    
     typename vector<Edge>::iterator it;
     for(it = v->adj.begin(); it != v->adj.end(); it++){
         if((it->dest->getPosition().X!=EndingPoint.X) || (it->dest->getPosition().Y != EndingPoint.Y)){
@@ -343,7 +343,7 @@ int main() {
     
     int choice;
     int algorithm;
-	vector<Vertex *> searchResult;
+    vector<Vertex *> searchResult;
     
     cout << "What mode do you want to play?" << endl;
     cout << "[1] Manual" << endl;
@@ -365,11 +365,11 @@ int main() {
         cout << "[6] A* search" << endl;
         cin >> algorithm;
         
-       // while(StartingPoint.X != EndingPoint.X || StartingPoint.Y != EndingPoint.Y){
-            searchResult = DFS();
-			int s = searchResult.size();
-			cout << "Coordinates on last vertex: ( " << searchResult.at(s - 1)->getPosition().X << ", " << searchResult.at(s - 1)->getPosition().Y << ")" << endl;
-      //  }
+        // while(StartingPoint.X != EndingPoint.X || StartingPoint.Y != EndingPoint.Y){
+        searchResult = DFS();
+        int s = searchResult.size();
+        cout << "Coordinates on last vertex: ( " << searchResult.at(s - 1)->getPosition().X << ", " << searchResult.at(s - 1)->getPosition().Y << ")" << endl;
+        //  }
     }
     
 	if (StartingPoint.X == EndingPoint.X && StartingPoint.Y == EndingPoint.Y)
