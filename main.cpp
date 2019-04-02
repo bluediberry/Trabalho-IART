@@ -1,17 +1,21 @@
-#include <windows.h>
 #include <iostream>
 #include <cstring>
 #include <vector>
 #include <queue>
 #include <stack>
+#include <unistd.h>
 #include <stdio.h>
 #include "Coord.h"
 #include "Graph.h"
+#include <chrono>
 
 using namespace std;
+using namespace std::chrono;
+
 
 const int MazeHeight = 18;
 const int MazeWidth = 18;
+int nodes = 0;
 
 char Maze[MazeWidth][MazeHeight] =
 {
@@ -32,7 +36,7 @@ char Maze[MazeWidth][MazeHeight] =
     { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
     { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
     { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-	{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }
+    { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }
 };
 
 const int Wall = 1;
@@ -116,7 +120,7 @@ void Left() {
         StartingPoint.Y--;
     }
     print_maze();
-    Sleep(1);
+    sleep(1);
 }
 
 void Right() {
@@ -127,7 +131,7 @@ void Right() {
         StartingPoint.Y++;
     }
     print_maze();
-    Sleep(1);
+    sleep(1);
 }
 
 void Up() {
@@ -138,7 +142,7 @@ void Up() {
         StartingPoint.X--;
     }
     print_maze();
-    Sleep(1);
+    sleep(1);
 }
 
 void Down() {
@@ -149,25 +153,25 @@ void Down() {
         StartingPoint.X++;
     }
     print_maze();
-    Sleep(1);
+    sleep(1);
 }
 
 int Manhattan(Coord current, Coord destination) {
-	int cX = current.X;
-	int cY = current.Y;
-	int dX = destination.X;
-	int dY = destination.Y;
-	int result = abs(cX - dX) + abs(cY - dY);
-	return result;
+    int cX = current.X;
+    int cY = current.Y;
+    int dX = destination.X;
+    int dY = destination.Y;
+    int result = abs(cX - dX) + abs(cY - dY);
+    return result;
 }
 
 int Euclidean(Coord current, Coord destination) {
-	int cX = current.X;
-	int cY = current.Y;
-	int dX = destination.X;
-	int dY = destination.Y;
-	int result = sqrt(abs(cX - dX) * 2 + abs(cY - dY) * 2);
-	return result;
+    int cX = current.X;
+    int cY = current.Y;
+    int dX = destination.X;
+    int dY = destination.Y;
+    int result = sqrt(abs(cX - dX) * 2 + abs(cY - dY) * 2);
+    return result;
 }
 
 void Solve()
@@ -200,7 +204,7 @@ void addChildren(Graph g, Vertex *v){
     vector<Coord>::iterator it;
     
     int flag  = 0;
-
+    
     vector<char> moves = AvailableMoves(v->getPosition().X, v->getPosition().Y);
     
     for (int i = 0; i < moves.size(); i++) {
@@ -212,20 +216,20 @@ void addChildren(Graph g, Vertex *v){
                 if(it->X == NextPosition(v->getPosition(), 'U').X && it->Y == NextPosition(v->getPosition(), 'U').Y){
                     flag = 1;
                 }
-
+                
             }
             if(flag != 1){
                 Vertex *nextv = g.addVertex(NextPosition(v->getPosition(), 'U'), 'U', v->getDepth());
                 graphPos.push_back(NextPosition(v->getPosition(), 'U'));
                 
-               cout << "(U) X: "<< nextv->getPosition().X << " Y: " << nextv->getPosition().Y << endl;
+                //cout << "(U) X: "<< nextv->getPosition().X << " Y: " << nextv->getPosition().Y << endl;
                 
                 g.addEdge(*v, *nextv, 1);
                 addChildren(g, nextv);
                 
             }
             
-   
+            
         }
         if (moves[i] == 'D' && v->getDirection() != 'U') {
             
@@ -235,11 +239,11 @@ void addChildren(Graph g, Vertex *v){
                 }
             }
             if(flag != 1){
-
+                
                 Vertex *nextv = g.addVertex(NextPosition(v->getPosition(), 'D'), 'D', v->getDepth());
                 graphPos.push_back(NextPosition(v->getPosition(), 'D'));
                 
-                cout << "(D) X: "<< nextv->getPosition().X << " Y: " << nextv->getPosition().Y << endl;
+                //cout << "(D) X: "<< nextv->getPosition().X << " Y: " << nextv->getPosition().Y << endl;
                 
                 g.addEdge(*v, *nextv, 1);
                 addChildren(g, nextv);
@@ -250,16 +254,16 @@ void addChildren(Graph g, Vertex *v){
             for (it = graphPos.begin(); it != graphPos.end(); it++) {
                 if(it->X == NextPosition(v->getPosition(), 'R').X && it->Y == NextPosition(v->getPosition(), 'R').Y){
                     flag = 1;
-;
+                    ;
                 }
             }
             if(flag != 1){
-                    Vertex *nextv = g.addVertex(NextPosition(v->getPosition(), 'R'), 'R', v->getDepth());
-                    graphPos.push_back(NextPosition(v->getPosition(), 'R'));
-                    
-                    cout << "(R) X: "<< nextv->getPosition().X << " Y: " << nextv->getPosition().Y << endl;
-                    
-                    g.addEdge(*v, *nextv, 1);
+                Vertex *nextv = g.addVertex(NextPosition(v->getPosition(), 'R'), 'R', v->getDepth());
+                graphPos.push_back(NextPosition(v->getPosition(), 'R'));
+                
+                //cout << "(R) X: "<< nextv->getPosition().X << " Y: " << nextv->getPosition().Y << endl;
+                
+                g.addEdge(*v, *nextv, 1);
                 addChildren(g, nextv);
                 
             }
@@ -270,17 +274,17 @@ void addChildren(Graph g, Vertex *v){
             for (it = graphPos.begin(); it != graphPos.end(); it++) {
                 if(it->X == NextPosition(v->getPosition(), 'L').X && it->Y == NextPosition(v->getPosition(), 'L').Y){
                     flag = 1;
-;
+                    ;
                 }
             }
             
             if(flag != 1){
-            Vertex *nextv = g.addVertex(NextPosition(v->getPosition(), 'L'), 'L', v->getDepth());
-            graphPos.push_back(NextPosition(v->getPosition(), 'L'));
-            
-            cout << "(L) X: "<< nextv->getPosition().X << " Y: " << nextv->getPosition().Y << endl;
-            
-            g.addEdge(*v, *nextv, 1);
+                Vertex *nextv = g.addVertex(NextPosition(v->getPosition(), 'L'), 'L', v->getDepth());
+                graphPos.push_back(NextPosition(v->getPosition(), 'L'));
+                
+                //cout << "(L) X: "<< nextv->getPosition().X << " Y: " << nextv->getPosition().Y << endl;
+                
+                g.addEdge(*v, *nextv, 1);
                 addChildren(g, nextv);
                 
             }
@@ -334,12 +338,13 @@ Graph Create_Graph(){
 void dfsVisit(Vertex *v, vector<Vertex *> & res) {
     v->visited = true;
     res.push_back(v);
-
+    
     
     typename vector<Edge>::iterator it;
     for(it = v->adj.begin(); it != v->adj.end(); it++){
         if(!it->dest->visited){
             dfsVisit(it->dest, res);
+            nodes++;
         }
     }
 }
@@ -349,7 +354,7 @@ vector<Vertex *> DFS(Graph g)
 {
     
     vector<Vertex *> res;
-
+    
     typename vector<Vertex *>::const_iterator it;
     
     for(it = g.vertexSet.begin(); it != g.vertexSet.end(); it++){
@@ -358,9 +363,9 @@ vector<Vertex *> DFS(Graph g)
     
     
     for(it  = g.vertexSet.begin(); it != g.vertexSet.end(); it++){
-            if(!(*it)->visited){
-                dfsVisit(*it, res);
-            }
+        if(!(*it)->visited){
+            dfsVisit(*it, res);
+        }
     }
     
     return res;
@@ -368,11 +373,11 @@ vector<Vertex *> DFS(Graph g)
 
 vector<Vertex *> BFS(Graph g, Vertex *v)
 {
+    nodes = 0;
     queue<Vertex *> temp;
     vector<Vertex *> res;
     
-    int flag = 0;
-
+    
     typename vector<Vertex *>::const_iterator it;
     
     for(it = g.vertexSet.begin(); it != g.vertexSet.end(); it++){
@@ -381,16 +386,10 @@ vector<Vertex *> BFS(Graph g, Vertex *v)
     
     temp.push(*g.vertexSet.begin()); //por na queue
     
-    if(flag == 0){
     while (!temp.empty())
     {
         
         Vertex* vertex = temp.front();
-    
-        if (vertex->getPosition().X == EndingPoint.X ||vertex->getPosition().Y == EndingPoint.Y) {
-            cout << "Found solution" << endl;
-            flag = 1;
-        }
         
         vertex->visited = true;
         temp.pop(); //tirar da queue
@@ -399,9 +398,8 @@ vector<Vertex *> BFS(Graph g, Vertex *v)
         for (it = vertex->adj.begin(); it != vertex->adj.end(); it++){
             if(!it->dest->visited){
                 temp.push(it->dest);
+                nodes++;
             }
-        }
-        
         }
     }
     return res;
@@ -418,19 +416,19 @@ void Solve_manual()
     
     if (find(moves.begin(), moves.end(), 'U') != moves.end()) {
         cout << "[0] Up" << endl;
-
+        
     }
     if (find(moves.begin(), moves.end(), 'D') != moves.end()) {
         cout << "[1] Down" << endl;
-
+        
     }
     if (find(moves.begin(), moves.end(), 'L') != moves.end()) {
         cout << "[2] Left" << endl;
-
+        
     }
     if (find(moves.begin(), moves.end(), 'R') != moves.end()) {
         cout << "[3] Right" << endl;
-
+        
     }
     cin >> n;
     
@@ -461,7 +459,7 @@ int main() {
     int algorithm;
     vector<Vertex *> searchResult;
     Graph g = Create_Graph();
-
+    
     
     cout << "What mode do you want to play?" << endl;
     cout << "[1] Manual" << endl;
@@ -483,31 +481,58 @@ int main() {
         cout << "[6] A* search (not implemented)" << endl;
         cin >> algorithm;
         
-        /*for (int i = 0; i < g.getVertexSet().size(); i++) {
-            cout << "X: "<< g.getVertexSet().at(i)->getPosition().X << " Y: " << g.getVertexSet().at(i)->getPosition().Y << endl;
-        }*/
-        switch (algorithm) {
-            case 1:
-                searchResult = DFS(g);
-                break;
-                
-            case 2:
-                searchResult = BFS(g, g.getVertexSet().front());
-            default:
-                break;
-        }
-
-        int s = searchResult.size();
         
-        for(int i = 0; i < s ; i++){
-          cout << "Coordinates: (" << searchResult.at(i)->getPosition().X << ", " << searchResult.at(i)->getPosition().Y << ")" << endl;
+        if(algorithm == 1){
+            vector<int> values(10000);
+            auto start = high_resolution_clock::now();
+            
+            searchResult = DFS(g);
+            
+            sort(values.begin(), values.end());
+            auto stop = high_resolution_clock::now();
+            auto duration = duration_cast<microseconds>(stop - start);
+            
+            cout<< endl << "Time taken by function: "
+            << duration.count() << " microseconds" << endl;
+            
+            cout << "Nodes expanded: " << nodes <<  endl;
+            
+            cout << "Size (in bytes): " << sizeof(searchResult) + sizeof(Vertex)*sizeof(searchResult) <<  endl;
+            
         }
-        cout << "Coordinates on last vertex: (" << searchResult.at(s - 1)->getPosition().X << ", " << searchResult.at(s -1)->getPosition().Y << ")" << endl;
+        if(algorithm == 2){
+            vector<int> values(10000);
+            auto start = high_resolution_clock::now();
+            
+            searchResult = BFS(g, g.getVertexSet().front());
+            
+            sort(values.begin(), values.end());
+            auto stop = high_resolution_clock::now();
+            auto duration = duration_cast<microseconds>(stop - start);
+            
+            cout << endl <<"Time taken by function: "
+            << duration.count() << " microseconds" << endl ;
+            
+            cout << "Nodes expanded: " << nodes <<  endl;
+            
+            cout << "Size (in bytes): " << sizeof(searchResult) + sizeof(Vertex)*sizeof(searchResult) <<  endl;
+            
+            
+        }
+        
+        //falta memory
+        
+        long int s = searchResult.size();
+        
+        /*for(int i = 0; i < s ; i++){
+         cout << "Coordinates: (" << searchResult.at(i)->getPosition().X << ", " << searchResult.at(i)->getPosition().Y << ")" << endl;
+         }*/
+        cout << "Coordinates on last vertex: (" << searchResult.at(s - 1)->getPosition().X << ", " << searchResult.at(s -1)->getPosition().Y << ")" << endl << endl;;
     }
-
-
-    if(StartingPoint.X == EndingPoint.X && StartingPoint.Y == EndingPoint.Y)
-		cout << "Congrats!" << endl;
+    
+    /*if(StartingPoint.X == EndingPoint.X && StartingPoint.Y == EndingPoint.Y)
+     cout << "Congrats!" << endl;*/
+    
     return 0;
 }
 
