@@ -11,6 +11,15 @@
 		X = coord.X; Y = coord.Y;
 	}
 
+	bool operator !=(const Coord& coord1, const Coord& coord2)
+	{
+		if ((coord1.X != coord2.X) || (coord1.Y != coord2.Y)) {
+			return true;
+		}
+		else
+			return false;
+	}
+
 int Coord::GetRow(){
     return X;
 }

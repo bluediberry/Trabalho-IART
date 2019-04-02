@@ -26,26 +26,32 @@ public:
     
     void addEdge(Vertex *dest, double w);
     
-    Vertex(int state, vector<Edge> adj, bool visited, Coord position, char direction, int depth, int cost) {
+    Vertex(int state, vector<Edge> adj, bool visited, Coord position, char direction, int depth) {
         this->state = state;
         this->adj = adj;
         this->position = position;
         this->direction = direction;
         this->depth = depth;
-        this->cost = cost;
     }
     
-    Vertex(Coord position, char direction, int depth, int cost) {
+   /* Vertex(Coord position, char direction, int depth) {
         this->position = position;
         this->direction = direction;
         this->depth = depth;
-        this->cost = cost;
-    }
+    }*/
     
     
     Coord getPosition() {
         return this->position;
     }
+
+	char getDirection() {
+		return this->direction;
+	}
+
+	int getDepth() {
+		return this->depth;
+	}
     friend class Graph;
 };
 
@@ -74,7 +80,7 @@ class Graph {
 public:
     int state;
     Vertex *findVertex(Vertex v);
-    bool addVertex(Coord position, char direction, int depth, int cost);
+    Vertex * addVertex(Coord position, char direction, int depth);
     bool addEdge(Vertex sourc, Vertex dest, double w);
     int getNumVertex();
     vector<Vertex *> getVertexSet();
@@ -104,12 +110,12 @@ Vertex * Graph::findVertex(Vertex v) {
 }
 
 
-bool Graph::addVertex(Coord position, char direction, int depth, int cost) {
+Vertex * Graph::addVertex(Coord position, char direction, int depth) {
     this->state++;
     vector<Edge> e;
-    Vertex *v = new Vertex(state, e, false, position, direction, depth, cost);
+    Vertex *v = new Vertex(state, e, false, position, direction, depth);
     this->vertexSet.push_back(v);
-    return true;
+    return v;
 }
 
 bool Graph::addEdge(Vertex sourc, Vertex dest, double w) {
