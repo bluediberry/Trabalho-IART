@@ -174,36 +174,80 @@ void Solve()
         default: {break;}
     }
 }
+vector<Coord> graphPos;
 
 void addChildren(Graph g, Vertex *v){
+    
+    //cout << "Add children X: " << v->getPosition().X << " Y: "<< v->getPosition().Y << endl;
     
     vector<char> moves = AvailableMoves(v->getPosition().X, v->getPosition().Y);
     
     
-    while (v->getDepth() < 15) {
-        for (int i = 0; i < moves.size(); i++) {
-            v->addDepth();
-            if (moves[i] == 'U' && v->getDirection()!='D') {
+    for (int i = 0; i < moves.size(); i++) {
+        v->addDepth();
+        if (moves[i] == 'U' && v->getDirection()!='D') {
+            //the next position isnt in the graph yet
+            if(find(graphPos.begin(), graphPos.end(), NextPosition(v->getPosition(), 'U')) != graphPos.end()){
+                continue;
+            }
+            else{
                 Vertex *nextv = g.addVertex(NextPosition(v->getPosition(), 'U'), 'U', v->getDepth());
-                g.addEdge(*v, *nextv, 1);
-                addChildren(g, nextv);
-            }
-            else if (moves[i] == 'D' && v->getDirection() != 'U') {
+                graphPos.push_back(NextPosition(v->getPosition(), 'U'));
                 
+                cout << "(U) X: "<< nextv->getPosition().X << " Y: " << nextv->getPosition().Y << endl;
+                
+                g.addEdge(*v, *nextv, 1);
+                addChildren(g, nextv);
+            }
+        }
+        else if (moves[i] == 'D' && v->getDirection() != 'U') {
+            
+            if(find(graphPos.begin(), graphPos.end(), NextPosition(v->getPosition(), 'D')) != graphPos.end()){
+                continue;
+            }
+            else{
                 Vertex *nextv = g.addVertex(NextPosition(v->getPosition(), 'D'), 'D', v->getDepth());
+                graphPos.push_back(NextPosition(v->getPosition(), 'D'));
+                
+                cout << "(D) X: "<< nextv->getPosition().X << " Y: " << nextv->getPosition().Y << endl;
+                
                 g.addEdge(*v, *nextv, 1);
                 addChildren(g, nextv);
             }
-            else if (moves[i] == 'R' && v->getDirection() != 'L') {
+            
+        }
+        else if (moves[i] == 'R' && v->getDirection() != 'L') {
+            
+            if(find(graphPos.begin(), graphPos.end(), NextPosition(v->getPosition(), 'R')) != graphPos.end()){
+                continue;
+            }
+            else{
                 Vertex *nextv = g.addVertex(NextPosition(v->getPosition(), 'R'), 'R', v->getDepth());
+                graphPos.push_back(NextPosition(v->getPosition(), 'R'));
+                
+                
+                cout << "(R) X: "<< nextv->getPosition().X << " Y: " << nextv->getPosition().Y << endl;
+                
                 g.addEdge(*v, *nextv, 1);
                 addChildren(g, nextv);
             }
-            else if (moves[i] == 'L' && v->getDirection() != 'R') {
+            
+        }
+        else if (moves[i] == 'L' && v->getDirection() != 'R') {
+            
+            if(find(graphPos.begin(), graphPos.end(), NextPosition(v->getPosition(), 'L')) != graphPos.end()){
+                continue;
+            }
+            else{
                 Vertex *nextv = g.addVertex(NextPosition(v->getPosition(), 'L'), 'L', v->getDepth());
+                graphPos.push_back(NextPosition(v->getPosition(), 'L'));
+                
+                cout << "(L) X: "<< nextv->getPosition().X << " Y: " << nextv->getPosition().Y << endl;
+                
                 g.addEdge(*v, *nextv, 1);
                 addChildren(g, nextv);
             }
+            
         }
     }
 }
@@ -222,21 +266,25 @@ Graph Create_Graph(){
         v->addDepth();
         if (moves[i] == 'U') {
             Vertex *nextv = g->addVertex(NextPosition(StartingPoint, 'U'), 'U', v->getDepth());
+            graphPos.push_back(NextPosition(StartingPoint, 'U'));
             g->addEdge(*v, *nextv, 1);
             addChildren(*g, nextv);
         }
         else if (moves[i] == 'D') {
             Vertex *nextv = g->addVertex(NextPosition(StartingPoint, 'D'), 'D',  v->getDepth());
+            graphPos.push_back(NextPosition(StartingPoint, 'D'));
             g->addEdge(*v, *nextv, 1);
             addChildren(*g, nextv);
         }
         else if (moves[i] == 'R') {
             Vertex *nextv = g->addVertex(NextPosition(StartingPoint, 'R'), 'R',  v->getDepth());
+            graphPos.push_back(NextPosition(StartingPoint, 'R'));
             g->addEdge(*v, *nextv, 1);
             addChildren(*g, nextv);
         }
         else if (moves[i] == 'L') {
             Vertex *nextv = g->addVertex(NextPosition(StartingPoint, 'L'), 'L',  v->getDepth());
+            graphPos.push_back(NextPosition(StartingPoint, 'L'));
             g->addEdge(*v, *nextv, 1);
             addChildren(*g, nextv);
         }
@@ -262,9 +310,8 @@ void dfsVisit(Vertex *v, vector<Vertex *> & res) {
 }
 
 
-vector<Vertex *> DFS()
+vector<Vertex *> DFS(Graph g)
 {
-    Graph g = Create_Graph();
     
     print_maze();
     sleep(1);
@@ -322,6 +369,8 @@ vector<Vertex *> BFS(Graph g, Vertex *v)
         }
         
     }
+    
+    
     return res;
 }
 
@@ -405,14 +454,22 @@ int main() {
         cout << "[6] A* search" << endl;
         cin >> algorithm;
         
-        searchResult = BFS(g, g.getVertexSet().front());
-        int s = searchResult.size();
+        /*for (int i = 0; i < g.getVertexSet().size(); i++) {
+         cout << "X: "<< g.getVertexSet().at(i)->getPosition().X << " Y: " << g.getVertexSet().at(i)->getPosition().Y << endl;
+         }*/
         
-        for(int i = 0; i < s ; i++){
-            cout << "Coordinates: (" << searchResult.at(i)->getPosition().X << ", " << searchResult.at(i)->getPosition().Y << ")" << endl;
-        }
-        cout << "Coordinates on last vertex: (" << searchResult.at(s - 1)->getPosition().X << ", " << searchResult.at(s - 1)->getPosition().Y << ")" << endl;
+        // searchResult =
+        BFS(g, g.getVertexSet().front());
+        
+        
+        /* int s = searchResult.size();
+         
+         for(int i = 0; i < s ; i++){
+         cout << "Coordinates: (" << searchResult.at(i)->getPosition().X << ", " << searchResult.at(i)->getPosition().Y << ")" << endl;
+         }
+         cout << "Coordinates on last vertex: (" << searchResult.at(s - 1)->getPosition().X << ", " << searchResult.at(s - 1)->getPosition().Y << ")" << endl;*/
     }
+    
     
     
     cout << "Congrats!" << endl;
