@@ -19,7 +19,7 @@ public:
     Coord position;
     //Node *parent; //parent node
     char direction; //operator
-    int depth; // depth of the node
+    int depth = 0; // depth of the node
     int cost; // path cost
     friend class Graph;
     
@@ -34,24 +34,27 @@ public:
         this->depth = depth;
     }
     
-   /* Vertex(Coord position, char direction, int depth) {
-        this->position = position;
-        this->direction = direction;
-        this->depth = depth;
-    }*/
+    /* Vertex(Coord position, char direction, int depth) {
+     this->position = position;
+     this->direction = direction;
+     this->depth = depth;
+     }*/
     
     
     Coord getPosition() {
         return this->position;
     }
-
-	char getDirection() {
-		return this->direction;
-	}
-
-	int getDepth() {
-		return this->depth;
-	}
+    
+    char getDirection() {
+        return this->direction;
+    }
+    
+    void addDepth() {
+        this->depth++;
+    }
+    int getDepth() {
+        return this->depth;
+    }
     friend class Graph;
 };
 
