@@ -6,6 +6,7 @@
 #include <stack>
 #include <stdio.h>
 #include "Coord.h"
+#include "Board.h"
 #include "Graph.h"
 
 using namespace std;
@@ -13,7 +14,7 @@ using namespace std;
 const int MazeHeight = 18;
 const int MazeWidth = 18;
 
-char Maze[MazeWidth][MazeHeight] =
+char Maze[18][18] =
 {
     { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
     { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
@@ -457,11 +458,25 @@ int main() {
     
     print_maze();
     
+	int level;
     int choice;
     int algorithm;
     vector<Vertex *> searchResult;
     Graph g = Create_Graph();
 
+	cout << "What maze do you want to play?" << endl;
+	cout << "[1] Level 1" << endl;
+	cout << "[2] Level 2" << endl;
+	cout << "[3] Level 3" << endl;
+	cout << "[4] Level 4" << endl;
+	cin >> level;
+
+	if (level == 2)
+		Maze = Maze2;
+	if (level == 3)
+		Maze = Maze3;
+	if (level == 4)
+		Maze = Maze4;
     
     cout << "What mode do you want to play?" << endl;
     cout << "[1] Manual" << endl;
