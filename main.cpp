@@ -3,7 +3,7 @@
 #include <vector>
 #include <queue>
 #include <stack>
-#include <unistd.h>
+#include <windows.h>
 #include <stdio.h>
 #include "Coord.h"
 #include "Graph.h"
@@ -120,7 +120,7 @@ void Left() {
         StartingPoint.Y--;
     }
     print_maze();
-    sleep(1);
+    Sleep(1);
 }
 
 void Right() {
@@ -131,7 +131,7 @@ void Right() {
         StartingPoint.Y++;
     }
     print_maze();
-    sleep(1);
+    Sleep(1);
 }
 
 void Up() {
@@ -142,7 +142,7 @@ void Up() {
         StartingPoint.X--;
     }
     print_maze();
-    sleep(1);
+    Sleep(1);
 }
 
 void Down() {
@@ -153,7 +153,7 @@ void Down() {
         StartingPoint.X++;
     }
     print_maze();
-    sleep(1);
+    Sleep(1);
 }
 
 int Manhattan(Coord current, Coord destination) {
