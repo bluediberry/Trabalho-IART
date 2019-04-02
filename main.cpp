@@ -372,7 +372,7 @@ int main() {
       //  }
     }
     
-    
+	if (StartingPoint.X == EndingPoint.X && StartingPoint.Y == EndingPoint.Y)
     cout << "Congrats!" << endl;
     return 0;
 }
