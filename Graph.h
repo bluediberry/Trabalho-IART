@@ -77,13 +77,13 @@ Edge::Edge(Vertex *d, double w) {
 Vertex Edge::getDest(){ return *dest;}
 
 class Graph {
-    vector<Vertex *> vertexSet;    // vertex set
     
     
 public:
+    vector<Vertex *> vertexSet;    // vertex set
     int state;
     Vertex *findVertex(Vertex v);
-    bool addVertex(Coord position, char direction, int depth);
+    Vertex * addVertex(Coord position, char direction, int depth);
     bool addEdge(Vertex sourc, Vertex dest, double w);
     int getNumVertex();
     vector<Vertex *> getVertexSet();
@@ -113,12 +113,12 @@ Vertex * Graph::findVertex(Vertex v) {
 }
 
 
-bool Graph::addVertex(Coord position, char direction, int depth) {
+Vertex * Graph::addVertex(Coord position, char direction, int depth) {
     this->state++;
     vector<Edge> e;
     Vertex *v = new Vertex(state, e, false, position, direction, depth);
     this->vertexSet.push_back(v);
-    return true;
+    return v;
 }
 
 bool Graph::addEdge(Vertex sourc, Vertex dest, double w) {

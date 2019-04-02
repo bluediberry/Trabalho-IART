@@ -183,7 +183,7 @@ void addChildren(Graph g, Vertex *v){
     vector<Coord>::iterator it;
     
     int flag  = 0;
-    
+
     vector<char> moves = AvailableMoves(v->getPosition().X, v->getPosition().Y);
     
     for (int i = 0; i < moves.size(); i++) {
@@ -195,20 +195,20 @@ void addChildren(Graph g, Vertex *v){
                 if(it->X == NextPosition(v->getPosition(), 'U').X && it->Y == NextPosition(v->getPosition(), 'U').Y){
                     flag = 1;
                 }
-                
+
             }
             if(flag != 1){
                 Vertex *nextv = g.addVertex(NextPosition(v->getPosition(), 'U'), 'U', v->getDepth());
                 graphPos.push_back(NextPosition(v->getPosition(), 'U'));
                 
-                cout << "(U) X: "<< nextv->getPosition().X << " Y: " << nextv->getPosition().Y << endl;
+               cout << "(U) X: "<< nextv->getPosition().X << " Y: " << nextv->getPosition().Y << endl;
                 
                 g.addEdge(*v, *nextv, 1);
                 addChildren(g, nextv);
                 
             }
             
-            
+   
         }
         if (moves[i] == 'D' && v->getDirection() != 'U') {
             
@@ -218,7 +218,7 @@ void addChildren(Graph g, Vertex *v){
                 }
             }
             if(flag != 1){
-                
+
                 Vertex *nextv = g.addVertex(NextPosition(v->getPosition(), 'D'), 'D', v->getDepth());
                 graphPos.push_back(NextPosition(v->getPosition(), 'D'));
                 
@@ -233,16 +233,16 @@ void addChildren(Graph g, Vertex *v){
             for (it = graphPos.begin(); it != graphPos.end(); it++) {
                 if(it->X == NextPosition(v->getPosition(), 'R').X && it->Y == NextPosition(v->getPosition(), 'R').Y){
                     flag = 1;
-                    ;
+;
                 }
             }
             if(flag != 1){
-                Vertex *nextv = g.addVertex(NextPosition(v->getPosition(), 'R'), 'R', v->getDepth());
-                graphPos.push_back(NextPosition(v->getPosition(), 'R'));
-                
-                cout << "(R) X: "<< nextv->getPosition().X << " Y: " << nextv->getPosition().Y << endl;
-                
-                g.addEdge(*v, *nextv, 1);
+                    Vertex *nextv = g.addVertex(NextPosition(v->getPosition(), 'R'), 'R', v->getDepth());
+                    graphPos.push_back(NextPosition(v->getPosition(), 'R'));
+                    
+                    cout << "(R) X: "<< nextv->getPosition().X << " Y: " << nextv->getPosition().Y << endl;
+                    
+                    g.addEdge(*v, *nextv, 1);
                 addChildren(g, nextv);
                 
             }
@@ -253,17 +253,17 @@ void addChildren(Graph g, Vertex *v){
             for (it = graphPos.begin(); it != graphPos.end(); it++) {
                 if(it->X == NextPosition(v->getPosition(), 'L').X && it->Y == NextPosition(v->getPosition(), 'L').Y){
                     flag = 1;
-                    ;
+;
                 }
             }
             
             if(flag != 1){
-                Vertex *nextv = g.addVertex(NextPosition(v->getPosition(), 'L'), 'L', v->getDepth());
-                graphPos.push_back(NextPosition(v->getPosition(), 'L'));
-                
-                cout << "(L) X: "<< nextv->getPosition().X << " Y: " << nextv->getPosition().Y << endl;
-                
-                g.addEdge(*v, *nextv, 1);
+            Vertex *nextv = g.addVertex(NextPosition(v->getPosition(), 'L'), 'L', v->getDepth());
+            graphPos.push_back(NextPosition(v->getPosition(), 'L'));
+            
+            cout << "(L) X: "<< nextv->getPosition().X << " Y: " << nextv->getPosition().Y << endl;
+            
+            g.addEdge(*v, *nextv, 1);
                 addChildren(g, nextv);
                 
             }
@@ -314,74 +314,37 @@ Graph Create_Graph(){
 }
 
 
-/*void dfsVisit(Vertex *v, vector<Vertex *> & res) {
- v->visited = true;
- res.push_back(v);
- 
- 
- typename vector<Edge>::iterator it;
- for(it = v->adj.begin(); it != v->adj.end(); it++){
- if(!it->dest->visited){
- dfsVisit(it->dest, res);
- }
- }
- }*/
+void dfsVisit(Vertex *v, vector<Vertex *> & res) {
+    v->visited = true;
+    res.push_back(v);
+
+    
+    typename vector<Edge>::iterator it;
+    for(it = v->adj.begin(); it != v->adj.end(); it++){
+        if(!it->dest->visited){
+            dfsVisit(it->dest, res);
+        }
+    }
+}
 
 
 vector<Vertex *> DFS(Graph g)
 {
     
     vector<Vertex *> res;
-    stack<Vertex *> temp;
-    vector<Vertex *> vertexSet = g.getVertexSet();
-    
-    int flag = 0;
-    
+
     typename vector<Vertex *>::const_iterator it;
     
-    for(it = vertexSet.begin(); it != vertexSet.end(); it++){
+    for(it = g.vertexSet.begin(); it != g.vertexSet.end(); it++){
         (*it)->visited = false;
     }
     
-    temp.push(*vertexSet.begin());
     
-    if(flag == 0){
-        while (!temp.empty()) {
-            Vertex* vertex = temp.top();
-            
-            vertex->visited = true;
-            
-            if (vertex->getPosition().X == EndingPoint.X ||vertex->getPosition().Y == EndingPoint.Y) {
-                cout << "Found solution" << endl;
-                flag = 1;
+    for(it  = g.vertexSet.begin(); it != g.vertexSet.end(); it++){
+            if(!(*it)->visited){
+                dfsVisit(*it, res);
             }
-            
-            temp.pop(); //tirar da queue
-            res.push_back(vertex);
-            typename vector<Edge>::iterator it;
-            for (it = vertex->adj.begin(); it != vertex->adj.end(); it++){
-                if(!it->dest->visited){
-                    temp.push(it->dest);
-                }
-            }
-            
-        }
-        
     }
-    
-    /*vector<Vertex *> vertexSet = g.getVertexSet();
-     typename vector<Vertex *>::const_iterator it;
-     
-     for(it = vertexSet.begin(); it != vertexSet.end(); it++){
-     (*it)->visited = false;
-     }
-     
-     
-     for(it  = vertexSet.begin(); it != vertexSet.end(); it++){
-     if(!(*it)->visited){
-     dfsVisit(*it, res);
-     }
-     }*/
     
     return res;
 }
@@ -392,37 +355,36 @@ vector<Vertex *> BFS(Graph g, Vertex *v)
     vector<Vertex *> res;
     
     int flag = 0;
-    
-    vector<Vertex *> vertexSet = g.getVertexSet();
+
     typename vector<Vertex *>::const_iterator it;
     
-    for(it = vertexSet.begin(); it != vertexSet.end(); it++){
+    for(it = g.vertexSet.begin(); it != g.vertexSet.end(); it++){
         (*it)->visited = false;
     }
     
-    temp.push(*vertexSet.begin()); //por na queue
+    temp.push(*g.vertexSet.begin()); //por na queue
     
     if(flag == 0){
-        while (!temp.empty())
-        {
-            
-            Vertex* vertex = temp.front();
-            
-            if (vertex->getPosition().X == EndingPoint.X ||vertex->getPosition().Y == EndingPoint.Y) {
-                cout << "Found solution" << endl;
-                flag = 1;
+    while (!temp.empty())
+    {
+        
+        Vertex* vertex = temp.front();
+    
+        if (vertex->getPosition().X == EndingPoint.X ||vertex->getPosition().Y == EndingPoint.Y) {
+            cout << "Found solution" << endl;
+            flag = 1;
+        }
+        
+        vertex->visited = true;
+        temp.pop(); //tirar da queue
+        res.push_back(vertex);
+        typename vector<Edge>::iterator it;
+        for (it = vertex->adj.begin(); it != vertex->adj.end(); it++){
+            if(!it->dest->visited){
+                temp.push(it->dest);
             }
-            
-            vertex->visited = true;
-            temp.pop(); //tirar da queue
-            res.push_back(vertex);
-            typename vector<Edge>::iterator it;
-            for (it = vertex->adj.begin(); it != vertex->adj.end(); it++){
-                if(!it->dest->visited){
-                    temp.push(it->dest);
-                }
-            }
-            
+        }
+        
         }
     }
     return res;
@@ -439,23 +401,19 @@ void Solve_manual()
     
     if (find(moves.begin(), moves.end(), 'U') != moves.end()) {
         cout << "[0] Up" << endl;
-        /*Coord newC = NextPosition(StartingPoint, 'U');
-         cout << newC.X << ", " << newC.Y;*/
+
     }
     if (find(moves.begin(), moves.end(), 'D') != moves.end()) {
         cout << "[1] Down" << endl;
-        /*Coord newC = NextPosition(StartingPoint, 'D');
-         cout << newC.X << ", " << newC.Y;*/
+
     }
     if (find(moves.begin(), moves.end(), 'L') != moves.end()) {
         cout << "[2] Left" << endl;
-        /*Coord newC = NextPosition(StartingPoint, 'L');
-         cout << newC.X << ", " << newC.Y;*/
+
     }
     if (find(moves.begin(), moves.end(), 'R') != moves.end()) {
         cout << "[3] Right" << endl;
-        /*Coord newC = NextPosition(StartingPoint, 'R');
-         cout << newC.X << ", " << newC.Y;*/
+
     }
     cin >> n;
     
@@ -486,7 +444,7 @@ int main() {
     int algorithm;
     vector<Vertex *> searchResult;
     Graph g = Create_Graph();
-    
+
     
     cout << "What mode do you want to play?" << endl;
     cout << "[1] Manual" << endl;
@@ -502,29 +460,35 @@ int main() {
         cout << "What algorithm should I use?" << endl;
         cout << "[1] Depth first search" << endl;
         cout << "[2] Breadth first search" << endl;
-        cout << "[3] Iterative deepening search" << endl;
-        cout << "[4] Uniform cost search" << endl;
-        cout << "[5] Greedy search" << endl;
-        cout << "[6] A* search" << endl;
+        cout << "[3] Iterative deepening search (not implemented)" << endl;
+        cout << "[4] Uniform cost search (not implemented)" << endl;
+        cout << "[5] Greedy search (not implemented)" << endl;
+        cout << "[6] A* search (not implemented)" << endl;
         cin >> algorithm;
         
         /*for (int i = 0; i < g.getVertexSet().size(); i++) {
-         cout << "X: "<< g.getVertexSet().at(i)->getPosition().X << " Y: " << g.getVertexSet().at(i)->getPosition().Y << endl;
-         }*/
-        
-        //searchResult = BFS(g, g.getVertexSet().front());
-        searchResult = DFS(g);
-        
-        
+            cout << "X: "<< g.getVertexSet().at(i)->getPosition().X << " Y: " << g.getVertexSet().at(i)->getPosition().Y << endl;
+        }*/
+        switch (algorithm) {
+            case 1:
+                searchResult = DFS(g);
+                break;
+                
+            case 2:
+                searchResult = BFS(g, g.getVertexSet().front());
+            default:
+                break;
+        }
+
         int s = searchResult.size();
         
         for(int i = 0; i < s ; i++){
-            cout << "Coordinates: (" << searchResult.at(i)->getPosition().X << ", " << searchResult.at(i)->getPosition().Y << ")" << endl;
+          cout << "Coordinates: (" << searchResult.at(i)->getPosition().X << ", " << searchResult.at(i)->getPosition().Y << ")" << endl;
         }
         cout << "Coordinates on last vertex: (" << searchResult.at(s - 1)->getPosition().X << ", " << searchResult.at(s -1)->getPosition().Y << ")" << endl;
     }
-    
-    
+
+
     
     cout << "Congrats!" << endl;
     return 0;
