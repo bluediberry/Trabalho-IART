@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <iostream>
 #include "nlinhas.hpp"
+
 using namespace std;
 
 int PlayerDrop( char board[][10], playerInfo activePlayer );

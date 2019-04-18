@@ -30,6 +30,7 @@ int nlinhas4 ( char board[][10], playerInfo activePlayer )
             {
                 win = 1;
             }
+
             
             if( board[i][ix] == XO   &&
                board[i-1][ix] == XO &&
@@ -38,6 +39,7 @@ int nlinhas4 ( char board[][10], playerInfo activePlayer )
             {
                 win = 1;
             }
+
             
             if( board[i][ix] == XO     &&
                board[i-1][ix+1] == XO &&
@@ -46,6 +48,7 @@ int nlinhas4 ( char board[][10], playerInfo activePlayer )
             {
                 win = 1;
             }
+
             
             if ( board[i][ix] == XO   &&
                 board[i][ix+1] == XO &&
@@ -54,6 +57,7 @@ int nlinhas4 ( char board[][10], playerInfo activePlayer )
             {
                 win = 1;
             }
+
         }
         
     }
@@ -67,7 +71,6 @@ int nlinhas3 ( char board[][10], playerInfo activePlayer )
     char XO;
     char free = '*';
     int nlinhas3 = 0;
-    int counter = 0;
     
     XO = activePlayer.playerID;
     
